@@ -20,9 +20,9 @@ OpenServerCommand::OpenServerCommand(string portStr) {
 }
 
 double OpenServerCommand::execute() {
-    std::thread t1(&OpenServerCommand::startSocket, this);
-    t1.join();
-    //startSocket();
+    //std::thread t1(&OpenServerCommand::startSocket, this);
+    //t1.join();
+    startSocket();
     return 1 + numberOfArgs;
 }
 
@@ -34,7 +34,7 @@ void OpenServerCommand::startSocket() {
         //return -1;
     }
     //close(socketfd);
-    sockaddr_in address;
+    sockaddr_in address{};
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(this->port);

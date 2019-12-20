@@ -15,7 +15,7 @@ class OpenServerCommand : public Command {
 public:
     OpenServerCommand(string portAsString);
 
-    double execute();
+    double execute() override;
 
     void startSocket();
 };
@@ -26,7 +26,8 @@ class ConnectCommand : public Command {
 public:
     ConnectCommand(const char *ipAsString, string portAsString);
 
-    double execute();
+    double execute() override;
+    void ConnectStart();
 };
 
 class DefineVarCommand : public Command {
