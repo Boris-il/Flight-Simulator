@@ -11,7 +11,7 @@ using namespace std;
 class Command {
 
 protected:
-    int numberOfArgs;
+    unsigned numberOfArgs = 0;
 public:
     virtual double execute() = 0;
 

@@ -52,15 +52,15 @@ void OpenServerCommand::startSocket() {
         cerr << "Error accepting client" << endl;
         //return -4;
     }
-    int x =1;
-   while (x==1){
-     char buffer[1024]={0};
-     int valread = read(client_socket, buffer, 1024);
-     cout << buffer << endl;
-     if (buffer[0] == 'S'){
-       x=0;
-     }
-   }
+    int x = 1;
+    while (x == 1) {
+        char buffer[1024] = {0};
+        int valread = read(client_socket, buffer, 1024);
+        cout << buffer << endl;
+        if (buffer[0] == 'S') {
+            x = 0;
+        }
+    }
     close(socketfd);
 
 }

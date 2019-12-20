@@ -4,17 +4,14 @@
 
 
 #include "ex3.h"
+#include "Command.h"
+#include "CommandTypes.h"
 #include <fstream>
 #include <iostream>
 #include <vector>
 #include <algorithm>
 
 using namespace std;
-
-// implement parser constructor
-Parser::Parser() {
-    // here I will initialize maps
-}
 
 // implement lexer
 vector<string> Parser::lexer(string fileName) {
@@ -164,5 +161,14 @@ vector<string> Parser::lexer(string fileName) {
 }
 
 // implement parser
+void Parser::parse(const vector<string> &commands) {
+    for (unsigned i = 0; i < commands.size(); i++) {
+//        Command c = map.get(commands[i]);
+//        if (c!=nullptr) {
+//            i += c.execute();
+//        }
+    }
+}
+
 
 
