@@ -7,6 +7,7 @@
 
 #include <string>
 #include "Command.h"
+#include <thread>
 
 class OpenServerCommand : public Command {
     int port;
@@ -15,7 +16,7 @@ public:
 
     double execute();
 
-    int startSocket();
+    void startSocket();
 };
 
 class ConnectCommand : public Command {

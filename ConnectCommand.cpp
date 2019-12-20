@@ -40,7 +40,7 @@ double ConnectCommand::execute() {
         cout << "Client is now connected to server" << endl;
     }
 
-    //close(socketfd);
+    close(client_socket);
 
 }
 

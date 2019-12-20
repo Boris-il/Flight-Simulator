@@ -12,6 +12,9 @@ int main(int argc, char *argv[]) {
     // commands = p.lexer(argv[1]);
 
     std::cout << "Hello, World!" << std::endl;
-//  OpenServerCommand("5400");
+
+    double d = OpenServerCommand("5400").execute();
+   // d=ConnectCommand("127.0.0.1", "5402").execute();
+    cout << "finished" << endl;
     return 0;
 }

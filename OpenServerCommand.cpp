@@ -20,17 +20,20 @@ OpenServerCommand::OpenServerCommand(string portStr) {
 }
 
 double OpenServerCommand::execute() {
-    thread t1(startSocket());
+    std::thread t1(&OpenServerCommand::startSocket, this);
     t1.join();
+    //startSocket();
     return 1 + numberOfArgs;
 }
 
-int OpenServerCommand::startSocket() {
+void OpenServerCommand::startSocket() {
+    cout << "starting socket" << endl;
     int socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd == -1) {
         cerr << "could not create a socket" << endl;
         //return -1;
     }
+    //close(socketfd);
     sockaddr_in address;
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
@@ -49,10 +52,16 @@ int OpenServerCommand::startSocket() {
         cerr << "Error accepting client" << endl;
         //return -4;
     }
-
-
-
-    //close(socketfd);
+    int x =1;
+   while (x==1){
+     char buffer[1024]={0};
+     int valread = read(client_socket, buffer, 1024);
+     cout << buffer << endl;
+     if (buffer[0] == 'S'){
+       x=0;
+     }
+   }
+    close(socketfd);
 
 }
 
