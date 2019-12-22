@@ -6,9 +6,11 @@
 #define FLIGHT_SIMULATOR_EX3_H
 
 #include <map>
+#include <unordered_map>
 #include <string>
 #include <vector>
 #include "ex3.h"
+#include "Command.h"
 
 using namespace std;
 
@@ -50,12 +52,12 @@ class Parser {
 
 public:
     // commands map
-//    unordered_map<string, Command> cmd_map;
+    unordered_map<string, Command*> cmd_map;
     // var_map
     map<string, Var> var_map;
 
     // constructor
-    Parser() {};
+    Parser();
 
     // destructor
     ~Parser() {};
@@ -64,7 +66,7 @@ public:
     static vector<string> lexer(string);
 
     // parse func declaration
-    static void parse(const vector<string> &);
+    void parse(const vector<string> &);
 };
 
 
