@@ -19,7 +19,7 @@ OpenServerCommand::OpenServerCommand(string portStr) {
     this->numberOfArgs = 1;
 }
 
-double OpenServerCommand::execute() {
+unsigned OpenServerCommand::execute(vector<string> &cmd_vec, unordered_map<string, Var> &var_map) {
     std::thread t1(&OpenServerCommand::startSocket, this);
     t1.join();
     //startSocket();

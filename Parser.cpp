@@ -4,7 +4,7 @@
 
 
 #include "ex3.h"
-#include "Command.h"
+//#include "Command.h"
 #include "CommandTypes.h"
 #include <fstream>
 #include <iostream>
@@ -16,8 +16,6 @@ using namespace std;
 // implement constructor
 Parser::Parser() {
     // populate commands map
-    DefineVarCommand def = DefineVarCommand();
-    this->cmd_map["var"] = &def;
 }
 
 
@@ -168,15 +166,14 @@ vector<string> Parser::lexer(string fileName) {
 }
 
 // implement parser
-void Parser::parse(const vector<string> &commands) {
+void Parser::parse(vector<string> &commands, map<string, Command *> cmd_map) {
     for (unsigned i = 0; i < commands.size(); i++) {
-        auto pos = this->cmd_map.find(commands[i]);
-        if (pos == this->cmd_map.end()) {
+        auto pos = cmd_map.find(commands[i]);
+        if (pos == cmd_map.end()) {
             cerr << "undefined command" << endl;
         } else {
             Command *c = pos->second;
-
-            int temp = c->execute();
+            i += c->execute(commands, this->var_map);
         }
     }
 }

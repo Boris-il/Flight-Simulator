@@ -2,12 +2,12 @@
 // Created by boris on 20/12/2019.
 //
 
+#include "Command.h"
 #include "CommandTypes.h"
 #include "ex1.h"
 #include <sys/socket.h>
 //#include <bits/socket_type.h>
 #include <iostream>
-#include "CommandTypes.h"
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -21,7 +21,7 @@ ConnectCommand::ConnectCommand(const char *ipStr, string portStr) {
     this->port = (int) e->calculate();
 }
 
-double ConnectCommand::execute() {
+unsigned ConnectCommand::execute(vector<string> &cmd_vec, unordered_map<string, Var> &var_map) {
     int client_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (client_socket == -1) {
         cerr << "could not create a socket" << endl;

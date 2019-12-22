@@ -10,51 +10,46 @@
 #include <string>
 #include <vector>
 #include "ex3.h"
-#include "Command.h"
+//#include "Command.h"
 
 using namespace std;
 
 class Var {
-    string m_sim_path;
+    string m_var_name, m_simPath;
+    bool m_isBound = false;
     // "0" for ->
     // "1" for <-
-    unsigned m_bound_type = 0;
-    unsigned m_scope = 0;
+    unsigned m_bound_type = 0, m_scope = 0;
 
 public:
-    string m_var_name;
+    // constructor
+    Var(string var_name, bool isBound, unsigned bound_type, string simPath);
 
     // constructor
-    Var(string var_name, unsigned bound_type, unsigned scope) {
-        this->m_var_name = var_name;
-        this->m_bound_type = bound_type;
-        this->m_scope = scope;
-    };
-
-    // constructor
-    Var(string var_name, unsigned scope, Var *v) {
-        this->m_var_name = var_name;
-        this->m_scope = scope;
-        this->m_bound_type = v->m_bound_type;
-    };
+    Var(string var_name, unsigned scope, Var *v);
 
     // destructor
     ~Var() {};
 
     // operator ==
-    bool operator==(const Var &v) const {
-        return (this->m_var_name == v.m_var_name);
-    }
+    bool operator==(const Var &v) const;
 };
 
+class Command {
+
+public:
+    unsigned numberOfArgs = 0;
+
+    virtual unsigned execute(vector<string> &, unordered_map<string, Var> &) = 0;
+
+    virtual ~Command() {};
+};
 
 class Parser {
 
 public:
-    // commands map
-    unordered_map<string, Command*> cmd_map;
-    // var_map
-    map<string, Var> var_map;
+    // variables map
+    unordered_map<string, Var> var_map;
 
     // constructor
     Parser();
@@ -66,7 +61,7 @@ public:
     static vector<string> lexer(string);
 
     // parse func declaration
-    void parse(const vector<string> &);
+    void parse(vector<string> &, map<string, Command *>);
 };
 
 
