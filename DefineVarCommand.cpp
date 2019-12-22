@@ -18,6 +18,18 @@ DefineVarCommand::DefineVarCommand(Parser &p, const string &var_name, const stri
     this->v = &v;
 }
 
+//void DefineVarCommand::setParameters(Parser &p, const string &var_name, const string &sim_path, unsigned bound_type,
+//                                     unsigned scope, bool isBound, Var &v) {
+//    this->numberOfArgs = 4;
+//    this->m_var_name = var_name;
+//    this->m_sim_path = sim_path;
+//    this->m_bound_type = bound_type;
+//    this->m_isBound = isBound;
+//    this->m_scope = scope;
+//    this->p = &p;
+//    this->v = &v;
+//}
+
 // implement command execution
 double DefineVarCommand::execute() {
     if (this->m_isBound) {

@@ -13,6 +13,14 @@
 
 using namespace std;
 
+// implement constructor
+Parser::Parser() {
+    // populate commands map
+    DefineVarCommand def = DefineVarCommand();
+    this->cmd_map["var"] = &def;
+}
+
+
 // implement lexer
 vector<string> Parser::lexer(string fileName) {
     string line, sub_command, sub_value;
@@ -43,22 +51,21 @@ vector<string> Parser::lexer(string fileName) {
                 // add the "while"
                 ret_string.push_back(line.substr(0, 5));
                 ret_string.push_back(",");
-                pos = line.find('<');
+                pos = line.find("<=");
                 if (pos != string::npos) {
                     ret_string.push_back(line.substr(5, pos - 5));
                     ret_string.push_back(",");
-                    ret_string.push_back("<");
+                    ret_string.push_back("<=");
                     ret_string.push_back(",");
-                    ret_string.push_back(line.substr(pos + 1, (line.length() - 1) - (pos + 1)));
+                    ret_string.push_back(line.substr(pos + 2, (line.length() - 1) - (pos + 2)));
                 } else {
-                    pos = line.find('>');
+                    pos = line.find("=>");
                     if (pos != string::npos) {
                         ret_string.push_back(line.substr(5, pos - 5));
                         ret_string.push_back(",");
-                        ret_string.push_back(">");
+                        ret_string.push_back("=>");
                         ret_string.push_back(",");
-                        ret_string.push_back(line.substr(pos + 1, (line.length() - 1) - (pos + 1)));
-
+                        ret_string.push_back(line.substr(pos + 2, (line.length() - 1) - (pos + 2)));
                     } else {
                         pos = line.find("==");
                         if (pos != string::npos) {
@@ -69,21 +76,21 @@ vector<string> Parser::lexer(string fileName) {
                             ret_string.push_back(line.substr(pos + 2, (line.length() - 1) - (pos + 2)));
 
                         } else {
-                            pos = line.find("=>");
+                            pos = line.find('>');
                             if (pos != string::npos) {
                                 ret_string.push_back(line.substr(5, pos - 5));
                                 ret_string.push_back(",");
-                                ret_string.push_back("=>");
+                                ret_string.push_back(">");
                                 ret_string.push_back(",");
-                                ret_string.push_back(line.substr(pos + 2, (line.length() - 1) - (pos + 2)));
+                                ret_string.push_back(line.substr(pos + 1, (line.length() - 1) - (pos + 1)));
                             } else {
-                                pos = line.find("<=");
+                                pos = line.find('<');
                                 if (pos != string::npos) {
                                     ret_string.push_back(line.substr(5, pos - 5));
                                     ret_string.push_back(",");
-                                    ret_string.push_back("<=");
+                                    ret_string.push_back("<");
                                     ret_string.push_back(",");
-                                    ret_string.push_back(line.substr(pos + 2, (line.length() - 1) - (pos + 2)));
+                                    ret_string.push_back(line.substr(pos + 1, (line.length() - 1) - (pos + 1)));
                                 }
                             }
                         }
@@ -163,10 +170,14 @@ vector<string> Parser::lexer(string fileName) {
 // implement parser
 void Parser::parse(const vector<string> &commands) {
     for (unsigned i = 0; i < commands.size(); i++) {
-//        Command c = map.get(commands[i]);
-//        if (c!=nullptr) {
-//            i += c.execute();
-//        }
+        auto pos = this->cmd_map.find(commands[i]);
+        if (pos == this->cmd_map.end()) {
+            cerr << "undefined command" << endl;
+        } else {
+            Command *c = pos->second;
+
+            int temp = c->execute();
+        }
     }
 }
 
