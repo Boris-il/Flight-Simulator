@@ -9,10 +9,16 @@ void func1();
 void func2();
 int main(int argc, char *argv[]) {
     Parser p;
+    // commands map
+    map<string, Command *> cmd_map;
+    DefineVarCommand def = DefineVarCommand();
+    cmd_map["var"] = &def;
+
+
     vector<string> commands;
     // get array of commands and their arguments
     commands = p.lexer(argv[1]);
-    p.parse(commands);
+    p.parse(commands, cmd_map);
 
     std::cout << "Hello, World!" << std::endl;
 

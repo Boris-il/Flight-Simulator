@@ -2,6 +2,7 @@
 // Created by boris on 20/12/2019.
 //
 
+#include "Command.h"
 #include "CommandTypes.h"
 #include "ex1.h"
 #include <sys/socket.h>
@@ -22,7 +23,7 @@ ConnectCommand::ConnectCommand(const char *ipStr, string portStr) {
     this->port = (int) e->calculate();
 }
 
-double ConnectCommand::execute() {
+unsigned ConnectCommand::execute(vector<string> &cmd_vec, unordered_map<string, Var> &var_map) {
 
   //std::thread t2(&ConnectCommand::ConnectStart, this);
   //t2.join();

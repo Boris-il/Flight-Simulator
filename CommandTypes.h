@@ -15,7 +15,7 @@ class OpenServerCommand : public Command {
 public:
     OpenServerCommand(string portAsString);
 
-    double execute() override;
+    unsigned execute(vector<string> &cmd_vec, unordered_map<string, Var> &var_map);
 
     void startSocket();
 };
@@ -26,11 +26,12 @@ class ConnectCommand : public Command {
 public:
     ConnectCommand(const char *ipAsString, string portAsString);
 
-    double execute() override;
+    unsigned execute(vector<string> &cmd_vec, unordered_map<string, Var> &var_map);
     void ConnectStart();
 };
 
 class DefineVarCommand : public Command {
+protected:
     Parser *p;
     Var *v;
     string m_sim_path, m_var_name;
@@ -43,15 +44,13 @@ class DefineVarCommand : public Command {
 
 public:
     // define constructor
-    DefineVarCommand(Parser &, const string &, const string &, unsigned, unsigned, bool, Var &);
-    DefineVarCommand() {};
+    //DefineVarCommand(Parser &, const string &, const string &, unsigned, unsigned, bool, Var &);
+    DefineVarCommand();
 
     // define destructor
     ~DefineVarCommand();
 
-    //void setParameters(Parser &, const string &, const string &, unsigned, unsigned, bool, Var &);
-
-    double execute();
+    unsigned execute(vector<string> &, unordered_map<string, Var> &);
 };
 
 

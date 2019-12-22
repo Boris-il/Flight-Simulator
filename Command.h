@@ -5,18 +5,11 @@
 #ifndef FLIGHT_SIMULATOR_COMMAND_H
 #define FLIGHT_SIMULATOR_COMMAND_H
 
+#include <vector>
+#include <string>
+
 
 using namespace std;
-
-class Command {
-
-protected:
-    unsigned numberOfArgs = 0;
-public:
-    virtual double execute() = 0;
-
-    virtual ~Command() {};
-};
 
 
 #endif //FLIGHT_SIMULATOR_COMMAND_H
