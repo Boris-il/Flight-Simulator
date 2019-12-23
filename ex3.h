@@ -19,7 +19,7 @@ class Var {
 
 
     unsigned m_bound_type = 0, m_scope = 0;
-    double value;
+    double value = 0;
 
 public:
   bool m_isBound = false;
@@ -42,9 +42,7 @@ public:
 class Command {
 
 public:
-    unsigned numberOfArgs = 0;
-
-    virtual unsigned execute(vector<string> &, unordered_map<string, Var> &) = 0;
+    virtual unsigned execute(vector<string>::iterator, unordered_map<string, Var> &) = 0;
 
     virtual ~Command() {};
 };
@@ -76,5 +74,7 @@ public:
 //        return v.m_var_name;
 //    }
 //};
+static void populateCommandsMap(vector<string> *, map<string, Command *>);
+
 
 #endif //FLIGHT_SIMULATOR_EX3_H

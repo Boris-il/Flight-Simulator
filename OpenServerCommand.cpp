@@ -13,38 +13,30 @@
 #include <sstream>
 #include <fstream>
 #include "algorithm"
-map<string,double> initXml();
-OpenServerCommand::OpenServerCommand(){
-  this->numberOfArgs = 1;
-}
-OpenServerCommand::OpenServerCommand(string portStr) {
+
+unsigned OpenServerCommand::execute(vector<string>::iterator it_vec, unordered_map<string, Var> &var_map) {
+    unsigned index = 0;
     Expression *e;
     Interpreter *i1 = new Interpreter();
+    string portStr = *(it_vec + 2);
     e = i1->interpret(portStr);
-    this->port = (int) e->calculate();
-    this->numberOfArgs = 1;
-}
+    int port = (int) e->calculate();
+    index = 2;
 
-unsigned OpenServerCommand::execute(vector<string> &cmd_vec, unordered_map<string, Var> &var_map) {
-  string portStr = cmd_vec[1];
-  Expression *e;
-  Interpreter *i1 = new Interpreter();
-  e = i1->interpret(portStr);
-  this->port = (int) e->calculate();
     //std::thread t1(&OpenServerCommand::startSocket, this);
     //t1.join();
     //startSocket();
-  cout << "starting socket" << endl;
-  int socketfd = socket(AF_INET, SOCK_STREAM, 0);
-  if (socketfd == -1) {
-    cerr << "could not create a socket" << endl;
-    //return -1;
-  }
+    cout << "starting socket" << endl;
+    int socketfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (socketfd == -1) {
+        cerr << "could not create a socket" << endl;
+        //return -1;
+    }
   //close(socketfd);
   sockaddr_in address{};
   address.sin_family = AF_INET;
-  address.sin_addr.s_addr = INADDR_ANY;
-  address.sin_port = htons(this->port);
+    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_port = htons(port);
   if (bind(socketfd, (struct sockaddr *) &address, sizeof(address)) == -1) {
     cerr << "Could not bind the socket to an IP" << endl;
     //return -2;
@@ -105,24 +97,20 @@ unsigned OpenServerCommand::execute(vector<string> &cmd_vec, unordered_map<strin
     }*/
   close(socketfd);
 
-  return 1 + numberOfArgs;
+    return index;
 }
 
-void OpenServerCommand::startSocket() {
-
-}
-
-map<string,double> initXml(){
-  string line;
-  map<string, double> sim_Vars;
-  fstream in;
-  in.open("/usr/share/games/flightgear/Protocol/generic_small.xml", ios::in);
-  if (!in.is_open()){
-    cout << "open file fails"<<endl;
-  } else {
-    while (getline(in, line)) {
-      string::iterator end_pos = remove(line.begin(), line.end(), ' ');
-      line.erase(end_pos, line.end());
+map<string, double> OpenServerCommand::initXml() {
+    string line;
+    map<string, double> sim_Vars;
+    fstream in;
+    in.open("/usr/share/games/flightgear/Protocol/generic_small.xml", ios::in);
+    if (!in.is_open()) {
+        cout << "open file fails" << endl;
+    } else {
+        while (getline(in, line)) {
+            string::iterator end_pos = remove(line.begin(), line.end(), ' ');
+            line.erase(end_pos, line.end());
       if (line.rfind("<node>", 0) == 0){
         string sim = line.substr(6, line.length()-13);
         sim_Vars[sim] = 0;

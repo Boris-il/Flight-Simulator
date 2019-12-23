@@ -4,7 +4,6 @@
 
 
 #include "ex3.h"
-//#include "Command.h"
 #include "CommandTypes.h"
 #include <fstream>
 #include <iostream>
@@ -167,13 +166,16 @@ vector<string> Parser::lexer(string fileName) {
 
 // implement parser
 void Parser::parse(vector<string> &commands, map<string, Command *> cmd_map) {
+    auto itStart = commands.begin();
+    unsigned currentIndex = 0;
     for (unsigned i = 0; i < commands.size(); i++) {
         auto pos = cmd_map.find(commands[i]);
         if (pos == cmd_map.end()) {
             cerr << "undefined command" << endl;
         } else {
             Command *c = pos->second;
-            i += c->execute(commands, this->var_map);
+            currentIndex = c->execute(itStart + currentIndex, this->var_map);
+            i += (currentIndex + 1);
         }
     }
 }

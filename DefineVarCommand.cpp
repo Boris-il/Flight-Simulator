@@ -7,38 +7,31 @@
 #include <algorithm>
 
 // implement constructor
-//DefineVarCommand::DefineVarCommand(Parser &p, const string &var_name, const string &sim_path, unsigned bound_type,
-//                                   unsigned scope, bool isBound, Var &v) {
-//    this->numberOfArgs = 4;
-//    this->m_var_name = var_name;
-//    this->m_sim_path = sim_path;
-//    this->m_bound_type = bound_type;
-//    this->m_isBound = isBound;
-//    this->m_scope = scope;
-//    this->p = &p;
-//    this->v = &v;
-//}
-DefineVarCommand::DefineVarCommand() {
-
+DefineVarCommand::DefineVarCommand(vector<string> *commands) {
+    this->m_commands = commands;
+    this->v = nullptr;
 };
 
 // implement command execution
-unsigned DefineVarCommand::execute(vector<string> &cmd_vec, unordered_map<string, Var> &var_map) {
-    string var_name = cmd_vec[1];
+unsigned DefineVarCommand::execute(vector<string>::iterator it, unordered_map<string, Var> &var_map) {
+    unsigned index = 0;
+    string var_name = *(it + 2);
+    //string var_name = (*this->m_commands)[this->m_current_index + 2];
     unsigned bound_type;
-    if (cmd_vec[2] == "<=") {
+    if (*(it + 4) == "<=") {
         bound_type = 1;
     } else {
         bound_type = 0;
     }
-    string sim_path = cmd_vec[4];
-    // remove ""
+    string sim_path = *(it + 8);
+    // remove the ""
     string::iterator end_pos = remove(sim_path.begin(), sim_path.end(), '"');
     sim_path.erase(end_pos, sim_path.end());
     // create new Var instance
     Var new_var(var_name, true, bound_type, sim_path);
     // insert to var map
     var_map.emplace(var_name, new_var);
+    index = 8;
 
 //    if (this->m_isBound) {
 //        // create new var
@@ -49,14 +42,11 @@ unsigned DefineVarCommand::execute(vector<string> &cmd_vec, unordered_map<string
 //        Var v(this->m_var_name, this->m_scope, this->v);
 //    }
     // return num of indexes to proceed
-    return this->numberOfArgs;
+    return index;
 }
 
 // implement destructor
 DefineVarCommand::~DefineVarCommand() {
-    if (this->p != nullptr) {
-        free(this->p);
-    }
     if (this->v != nullptr) {
         free(this->v);
     }

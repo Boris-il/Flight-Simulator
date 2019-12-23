@@ -11,31 +11,23 @@
 #include "ex3.h"
 
 class OpenServerCommand : public Command {
-    int port;
 public:
-    OpenServerCommand();
+    OpenServerCommand() {};
 
-    OpenServerCommand(string portAsString);
+    unsigned execute(vector<string>::iterator, unordered_map<string, Var> &var_map);
 
-    unsigned execute(vector<string> &cmd_vec, unordered_map<string, Var> &var_map);
     map<string, double> initXml();
-    void startSocket();
 };
 
 class ConnectCommand : public Command {
-    const char *ip;
-    int port;
 public:
-    ConnectCommand();
-   // ConnectCommand(const char *ipAsString, string portAsString);
+    ConnectCommand() {};
 
-    unsigned execute(vector<string> &cmd_vec, unordered_map<string, Var> &var_map);
-    void ConnectStart();
+    unsigned execute(vector<string>::iterator, unordered_map<string, Var> &var_map);
 };
 
 class DefineVarCommand : public Command {
 protected:
-    Parser *p;
     Var *v;
     string m_sim_path, m_var_name;
     // "0" for ->
@@ -48,12 +40,13 @@ protected:
 public:
     // define constructor
     //DefineVarCommand(Parser &, const string &, const string &, unsigned, unsigned, bool, Var &);
-    DefineVarCommand();
+    //DefineVarCommand(vector<string> *);
+    DefineVarCommand() {};
 
     // define destructor
     ~DefineVarCommand();
 
-    unsigned execute(vector<string> &, unordered_map<string, Var> &);
+    unsigned execute(vector<string>::iterator, unordered_map<string, Var> &);
 };
 
 
