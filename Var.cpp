@@ -20,3 +20,6 @@ Var::Var(string var_name, unsigned scope, Var *v) {
 bool Var::operator==(const Var &v) const {
     return (this->m_var_name == v.m_var_name);
 }
+void Var::setValue(double num) {
+  this->value=num;
+}

@@ -16,12 +16,15 @@ using namespace std;
 
 class Var {
     string m_var_name, m_simPath;
-    bool m_isBound = false;
-    // "0" for ->
-    // "1" for <-
+
+
     unsigned m_bound_type = 0, m_scope = 0;
+    double value;
 
 public:
+  bool m_isBound = false;
+  // "0" for ->
+  // "1" for <-
     // constructor
     Var(string var_name, bool isBound, unsigned bound_type, string simPath);
 
@@ -33,6 +36,7 @@ public:
 
     // operator ==
     bool operator==(const Var &v) const;
+    void setValue(double num);
 };
 
 class Command {

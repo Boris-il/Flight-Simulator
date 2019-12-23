@@ -13,10 +13,12 @@
 class OpenServerCommand : public Command {
     int port;
 public:
+    OpenServerCommand();
+
     OpenServerCommand(string portAsString);
 
     unsigned execute(vector<string> &cmd_vec, unordered_map<string, Var> &var_map);
-
+    map<string, double> initXml();
     void startSocket();
 };
 
@@ -24,7 +26,8 @@ class ConnectCommand : public Command {
     const char *ip;
     int port;
 public:
-    ConnectCommand(const char *ipAsString, string portAsString);
+    ConnectCommand();
+   // ConnectCommand(const char *ipAsString, string portAsString);
 
     unsigned execute(vector<string> &cmd_vec, unordered_map<string, Var> &var_map);
     void ConnectStart();

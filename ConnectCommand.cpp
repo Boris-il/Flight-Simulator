@@ -13,7 +13,9 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <cstring>
-
+ConnectCommand::ConnectCommand(){
+  this->numberOfArgs = 2;
+}
 ConnectCommand::ConnectCommand(const char *ipStr, string portStr) {
     this->numberOfArgs = 2;
     this->ip = ipStr;
@@ -24,11 +26,12 @@ ConnectCommand::ConnectCommand(const char *ipStr, string portStr) {
 }
 
 unsigned ConnectCommand::execute(vector<string> &cmd_vec, unordered_map<string, Var> &var_map) {
-
+  string ipStr = vector1[1];
+  string portStr = vector1[2];
   //std::thread t2(&ConnectCommand::ConnectStart, this);
   //t2.join();
   ConnectStart();
-
+  return 1 + numberOfArgs;
 
 }
 void ConnectCommand::ConnectStart() {
