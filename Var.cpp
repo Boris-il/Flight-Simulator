@@ -24,3 +24,9 @@ bool Var::operator==(const Var &v) const {
 void Var::setValue(double num) {
     this->value = num;
 }
+string Var::getSim() {
+  return this->m_simPath;
+}
+double Var::getValue() {
+  return this->value;
+}

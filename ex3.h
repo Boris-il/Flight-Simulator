@@ -14,58 +14,60 @@
 
 using namespace std;
 
+bool shouldStop = false;
+
 class Var {
-    string m_var_name, m_simPath;
+  string m_var_name, m_simPath;
 
+  unsigned m_bound_type = 0, m_scope = 0;
+  double value = 0;
 
-    unsigned m_bound_type = 0, m_scope = 0;
-    double value = 0;
-
-public:
+ public:
   bool m_isBound = false;
   // "0" for ->
   // "1" for <-
-    // constructor
-    Var(string var_name, bool isBound, unsigned bound_type, string simPath);
+  // constructor
+  Var(string var_name, bool isBound, unsigned bound_type, string simPath);
 
-    // constructor
-    Var(string var_name, unsigned scope, Var *v);
+  // constructor
+  Var(string var_name, unsigned scope, Var *v);
 
-    // destructor
-    ~Var() {};
+  // destructor
+  ~Var() {};
 
-    // operator ==
-    bool operator==(const Var &v) const;
-    void setValue(double num);
+  // operator ==
+  bool operator==(const Var &v) const;
+  void setValue(double num);
+  string getSim();
+  double getValue();
 };
 
 class Command {
 
-public:
-    virtual unsigned execute(vector<string>::iterator, unordered_map<string, Var> &) = 0;
+ public:
+  virtual unsigned execute(vector<string>::iterator, unordered_map<string, Var> &) = 0;
 
-    virtual ~Command() {};
+  virtual ~Command() {};
 };
 
 class Parser {
 
-public:
-    // variables map
-    unordered_map<string, Var> var_map;
+ public:
+  // variables map
+  unordered_map<string, Var> var_map;
 
-    // constructor
-    Parser();
+  // constructor
+  Parser();
 
-    // destructor
-    ~Parser() {};
+  // destructor
+  ~Parser() {};
 
-    // lexer func declaration
-    static vector<string> lexer(string);
+  // lexer func declaration
+  static vector<string> lexer(string);
 
-    // parse func declaration
-    void parse(vector<string> &, map<string, Command *>);
+  // parse func declaration
+  void parse(vector<string> &, map<string, Command *>);
 };
-
 
 //class myHashFunction {
 //public:
@@ -75,6 +77,5 @@ public:
 //    }
 //};
 static void populateCommandsMap(vector<string> *, map<string, Command *>);
-
 
 #endif //FLIGHT_SIMULATOR_EX3_H
