@@ -227,14 +227,14 @@ private:
 
     void infixToPostfix(string input);
 
-    bool isNumVal(string s);
-
 public:
     // constructor
     Interpreter() {};
 
     // destructor
     ~Interpreter() {};
+
+    bool isNumVal(string s);
 
     void setVariables(string input);
 

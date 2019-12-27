@@ -14,32 +14,39 @@
 
 using namespace std;
 
-bool shouldStop = false;
+//bool shouldStop = false;
 
 class Var {
-  string m_var_name, m_simPath;
+    string m_var_name, m_simPath;
 
-  unsigned m_bound_type = 0, m_scope = 0;
-  double value = 0;
+    // "0" for ->
+    // "1" for <-
+    // "2" for not bound
+    unsigned m_bound_type = 0, m_scope = 0;
+    double value = 0;
 
- public:
-  bool m_isBound = false;
-  // "0" for ->
-  // "1" for <-
-  // constructor
-  Var(string var_name, bool isBound, unsigned bound_type, string simPath);
+public:
+    bool m_isBound = false;
 
-  // constructor
-  Var(string var_name, unsigned scope, Var *v);
+    // constructor
+    Var(string var_name, bool isBound, unsigned bound_type, string simPath);
 
-  // destructor
-  ~Var() {};
+    // constructor
+    Var() {};
 
-  // operator ==
-  bool operator==(const Var &v) const;
-  void setValue(double num);
-  string getSim();
-  double getValue();
+    Var(string var_name, unsigned scope, Var *v);
+
+    // destructor
+    ~Var() {};
+
+    // operator ==
+    bool operator==(const Var &v) const;
+
+    void setValue(double num);
+
+    string getSim();
+
+    double getValue();
 };
 
 class Command {
@@ -52,22 +59,23 @@ class Command {
 
 class Parser {
 
- public:
-  // variables map
-  unordered_map<string, Var> var_map;
+public:
+    // variables map
+    unordered_map<string, Var> var_map;
 
-  // constructor
-  Parser();
+    // constructor
+    Parser() {};
 
-  // destructor
-  ~Parser() {};
+    // destructor
+    ~Parser() {};
 
-  // lexer func declaration
-  static vector<string> lexer(string);
+    // lexer func declaration
+    static vector<string> lexer(const string &);
 
-  // parse func declaration
-  void parse(vector<string> &, map<string, Command *>);
+    // parse func declaration
+    void parse(vector<string> &, map<string, Command *>);
 };
+
 
 //class myHashFunction {
 //public:
@@ -77,5 +85,6 @@ class Parser {
 //    }
 //};
 static void populateCommandsMap(vector<string> *, map<string, Command *>);
+
 
 #endif //FLIGHT_SIMULATOR_EX3_H

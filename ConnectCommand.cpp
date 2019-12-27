@@ -17,10 +17,10 @@
 unsigned ConnectCommand::execute(vector<string>::iterator it, unordered_map<string, Var> &var_map) {
     unsigned index = 0;
 
-    string ipStr = *(it + 2);
+    string ipStr = *(it + 1);
     const char *ipFinal = ipStr.data();
-    string portStr = *(it + 4);
-    index = 4;
+    string portStr = *(it + 2);
+    index = 2;
     int port;
     Expression *e;
     Interpreter *i1 = new Interpreter();
@@ -50,7 +50,7 @@ unsigned ConnectCommand::execute(vector<string>::iterator it, unordered_map<stri
         cout << "Client is now connected to server" << endl;
     }
 
-  thread t2(&ConnectCommand::setData, var_map, client_socket);
+//  thread t2(&ConnectCommand::setData, var_map, client_socket);
 
   /* for (int i = 0; i < 10; ++i) {
        int is_sent = send(client_socket, "hi\n", strlen("hi\n"), 0);
@@ -66,21 +66,21 @@ unsigned ConnectCommand::execute(vector<string>::iterator it, unordered_map<stri
     return index;
 }
 void ConnectCommand::setData(unordered_map<string, Var> &var_map, int client_socket) {
-  string buffer;
-  while (!shouldStop) {
-    unordered_map<string, Var>::iterator it;
-    for (it = var_map.begin(); it != var_map.end(); it++) {
-      if (it->second.m_isBound == 0) {
-        buffer = "set " + it->second.getSim() + " " + to_string(it->second.getValue());
-        int is_sent = send(client_socket, &buffer, sizeof(buffer), 0);
-        if (is_sent == -1) {
-          cout << "Error sending message of set" << endl;
-        } else {
-          cout << "set message sent to server" << endl;
-        }
-      }
-    }
-  }
+    string buffer;
+//  while (!shouldStop) {
+//    unordered_map<string, Var>::iterator it;
+//    for (it = var_map.begin(); it != var_map.end(); it++) {
+//      if (it->second.m_isBound == 0) {
+//        buffer = "set " + it->second.getSim() + " " + to_string(it->second.getValue());
+//        int is_sent = send(client_socket, &buffer, sizeof(buffer), 0);
+//        if (is_sent == -1) {
+//          cout << "Error sending message of set" << endl;
+//        } else {
+//          cout << "set message sent to server" << endl;
+//        }
+//      }
+//    }
+//  }
 
 }
 
