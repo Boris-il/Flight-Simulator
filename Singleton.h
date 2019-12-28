@@ -7,6 +7,7 @@
 
 #include "ex3.h"
 #include "ex1.h"
+#include <map>
 
 
 class Singleton {
@@ -19,6 +20,8 @@ private:
 public:
     // interpreter member
     Interpreter *m_inter;
+    // commands map
+    map<string, Command *> m_commands_map;
 
     static Singleton *getInstance();
 

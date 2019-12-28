@@ -38,6 +38,8 @@ int main(int argc, char *argv[]) {
     cmd_map["Sleep"] = &slp;
     PrintCommand prt = PrintCommand();
     cmd_map["Print"] = &prt;
+    LoopCommand whl = LoopCommand();
+    cmd_map["while"] = &whl;
 
     // parse the commands vector
     p.parse(commands_from_lexer, cmd_map);

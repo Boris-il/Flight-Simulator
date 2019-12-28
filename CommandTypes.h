@@ -15,18 +15,27 @@ class ConditionParser : public Command {
 protected:
     list<Command *> m_commands_list;
 
-    virtual unsigned execute(vector<string>::iterator, unordered_map<string, Var> &var_map);
+    virtual unsigned execute(vector<string>::iterator, unordered_map<string, Var> &var_map) = 0;
 
     void addChild(Command *);
 
     static bool parseCondition(const string &);
 
     void makeCommandsList(vector<string>::iterator);
+
+public:
+    ConditionParser() {};
+
+    ~ConditionParser() {};
 };
 
 class LoopCommand : public ConditionParser {
     unsigned execute(vector<string>::iterator, unordered_map<string, Var> &var_map);
 
+public:
+    LoopCommand() {};
+
+    ~LoopCommand() {};
 };
 
 class OpenServerCommand : public Command {

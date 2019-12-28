@@ -223,8 +223,6 @@ private:
 
     string getComponent(int pos, string s);
 
-    double getVarValue(string var);
-
     void infixToPostfix(string input);
 
 public:
@@ -235,6 +233,8 @@ public:
     ~Interpreter() {};
 
     bool isNumVal(string s);
+
+    double getVarValue(string var);
 
     void setVariables(string input);
 

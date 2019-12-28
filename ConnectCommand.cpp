@@ -52,19 +52,20 @@ unsigned ConnectCommand::execute(vector<string>::iterator it, unordered_map<stri
 
 //  thread t2(&ConnectCommand::setData, var_map, client_socket);
 
-  /* for (int i = 0; i < 10; ++i) {
-       int is_sent = send(client_socket, "hi\n", strlen("hi\n"), 0);
-       if (is_sent == -1) {
-           cout << "Error sending message" << endl;
-       } else {
-           cout << "hi message sent to server" << endl;
-       }
-   }*/
+    /* for (int i = 0; i < 10; ++i) {
+         int is_sent = send(client_socket, "hi\n", strlen("hi\n"), 0);
+         if (is_sent == -1) {
+             cout << "Error sending message" << endl;
+         } else {
+             cout << "hi message sent to server" << endl;
+         }
+     }*/
 
-  //   close(client_socket);
+    //   close(client_socket);
 
     return index;
 }
+
 void ConnectCommand::setData(unordered_map<string, Var> &var_map, int client_socket) {
     string buffer;
 //  while (!shouldStop) {

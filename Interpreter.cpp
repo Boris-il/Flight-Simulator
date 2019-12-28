@@ -78,6 +78,7 @@ double Interpreter::getVarValue(string var) {
     }
 }
 
+
 void Interpreter::setVariables(string input) {
     string sub;
     int startIndex = 0;

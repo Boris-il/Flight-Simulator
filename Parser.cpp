@@ -9,8 +9,10 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include "Singleton.h"
 
 using namespace std;
+
 
 // implement lexer
 vector<string> Parser::lexer(const string &fileName) {
@@ -18,11 +20,16 @@ vector<string> Parser::lexer(const string &fileName) {
     size_t pos = 0, pos_temp = 0;
     fstream in_file;
     vector<string> ret_string;
+    bool condition_scope = false;
     in_file.open(fileName, ios::in);
     if (!in_file.is_open()) {
         cerr << "File open error" << endl;
     } else {
         while (getline(in_file, line)) {
+
+            if (condition_scope) {
+                ret_string.push_back("@");
+            }
 
             if (line.find("Print") == string::npos) {
                 // remove all spaces from the line
@@ -33,10 +40,12 @@ vector<string> Parser::lexer(const string &fileName) {
             // parse the line
             if (line.find('}') != string::npos) {
                 ret_string.push_back("}");
+                condition_scope = false;
                 continue;
             }
 
             if (line.find("while") != string::npos) {
+                condition_scope = true;
                 // add the "while"
                 ret_string.push_back(line.substr(0, 5));
                 pos = line.find("<=");
@@ -132,7 +141,11 @@ vector<string> Parser::lexer(const string &fileName) {
 }
 
 // implement parser
-void Parser::parse(vector<string> &commands, map<string, Command *> cmd_map) {
+void Parser::parse(vector<string> &commands, map<string, Command *> cmdMap) {
+
+    Singleton *s = Singleton::getInstance();
+    map<string, Command *> cmd_map = (s->m_commands_map);
+
     auto itStart = commands.begin();
     unsigned currentIndex = 0;
     for (unsigned i = 0; i < commands.size(); i++) {
@@ -155,6 +168,30 @@ void Parser::parse(vector<string> &commands, map<string, Command *> cmd_map) {
 
         }
     }
+
+
+//    auto itStart = commands.begin();
+//    unsigned currentIndex = 0;
+//    for (unsigned i = 0; i < commands.size(); i++) {
+//        auto pos = cmd_map.find(commands[i]);
+//        if (pos != cmd_map.end()) {
+//            Command *c = pos->second;
+//            currentIndex = c->execute(itStart + i, this->var_map);
+//            i += currentIndex;
+//            continue;
+//        } else {
+//            auto pos1 = this->var_map.find(commands[i]);
+//            if (pos1 != this->var_map.end()) {
+//                Command *c = cmd_map["var"];
+//                currentIndex = c->execute(itStart + i - 1, this->var_map);
+//                i += (currentIndex - 1);
+//                continue;
+//            }
+//
+//            cerr << "undefined command" << endl;
+//
+//        }
+//    }
 }
 
 

@@ -13,6 +13,10 @@ unsigned PrintCommand::execute(vector<string>::iterator it, unordered_map<string
     Singleton *s = Singleton::getInstance();
     Expression *e = nullptr;
 
+    if (*it == "@") {
+        ++it;
+    }
+
     string val_as_string = *(it + 1);
     if (val_as_string.at(0) == '"') {
         cout << val_as_string << endl;
