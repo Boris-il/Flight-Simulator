@@ -20,6 +20,7 @@ private:
 public:
     // interpreter member
     Interpreter *m_inter;
+  bool shouldStop = false;
     // commands map
     map<string, Command *> m_commands_map;
 

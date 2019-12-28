@@ -30,3 +30,7 @@ string Var::getSim() {
 double Var::getValue() {
   return this->value;
 }
+
+string Var::getName() {
+  return this->m_var_name;
+}

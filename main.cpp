@@ -18,6 +18,11 @@ void func1();
 void func2();
 
 int main(int argc, char *argv[]) {
+  /*OpenServerCommand opn = OpenServerCommand();
+  vector<string> v = {"Open", "5400"};
+  unordered_map<string,Var> varmap;
+  opn.execute(v.begin(), varmap);*/
+
     Parser p;
     // commands map
     map<string, Command *> cmd_map;

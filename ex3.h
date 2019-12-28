@@ -47,6 +47,8 @@ public:
     string getSim();
 
     double getValue();
+
+  string getName();
 };
 
 class Command {
