@@ -5,7 +5,7 @@
 #include "CommandTypes.h"
 #include "chrono"
 
-unsigned int SleepCommand::execute(vector<string>::iterator iterator, unordered_map<string, Var *> &map) {
+unsigned int SleepCommand::execute(vector<string>::iterator iterator) {
   unsigned index = 0;
   Expression *e;
   Interpreter *i1 = new Interpreter();

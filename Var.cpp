@@ -23,6 +23,7 @@ bool Var::operator==(const Var &v) const {
 
 void Var::setValue(double num) {
     this->value = num;
+  this->hasValue = true;
 }
 string Var::getSim() {
   return this->m_simPath;

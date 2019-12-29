@@ -22,11 +22,11 @@ class Var {
     // "1" for <-
     // "2" for not bound
     unsigned m_bound_type = 0, m_scope = 0;
-    double value = 0;
+  double value;
 
 public:
     bool m_isBound = false;
-
+  bool hasValue = false;
     // constructor
     Var(string var_name, bool isBound, unsigned bound_type, string simPath);
 
@@ -55,7 +55,7 @@ public:
 class Command {
 
  public:
-  virtual unsigned execute(vector<string>::iterator, unordered_map<string, Var *> &) = 0;
+  virtual unsigned execute(vector<string>::iterator) = 0;
 
   virtual ~Command() {};
 };
@@ -64,7 +64,7 @@ class Parser {
 
 public:
     // variables map
-    unordered_map<string, Var *> var_map;
+  // unordered_map<string, Var *> var_map;
 
     // constructor
     Parser() {};

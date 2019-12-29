@@ -15,7 +15,8 @@
 #include "algorithm"
 #include "Singleton.h"
 
-unsigned OpenServerCommand::execute(vector<string>::iterator it_vec, unordered_map<string, Var *> &var_map) {
+unsigned OpenServerCommand::execute(vector<string>::iterator it_vec) {
+  Singleton *s = Singleton::getInstance();
   unsigned index = 0;
   Expression *e;
   Interpreter *i1 = new Interpreter();
@@ -54,8 +55,7 @@ unsigned OpenServerCommand::execute(vector<string>::iterator it_vec, unordered_m
     //return -4;
   }
   vector<pair<string, float>> sim_value_vect = initXml();
-  unordered_map<string, string> sim_varName = buildSimNameMap(var_map);
-  this->var_map = &var_map;
+  unordered_map<string, string> sim_varName = buildSimNameMap();
   this->sim_value_vect = sim_value_vect;
   this->client_socket = client_socket;
   this->sim_varName = sim_varName;
@@ -109,13 +109,14 @@ vector<pair<string, float>> OpenServerCommand::initXml() {
 }
 
 void OpenServerCommand::receiveData() {
+
   Singleton *s = Singleton::getInstance();
   while (!s->shouldStop) {
     //todo lock
     char line[1024] = {0};
     int valread = read(client_socket, line, 1024);
 
-    std::vector<double> vect;
+    std::vector<float> vect;
 
     std::stringstream ss(line);
     float i;
@@ -128,17 +129,40 @@ void OpenServerCommand::receiveData() {
     }
 
     for (int i = 0; i < sim_value_vect.size(); ++i) {
-      sim_varName = buildSimNameMap(*var_map);
-      if (sim_varName.find(sim_value_vect[i].first) == sim_varName.end()) {
+      sim_varName = buildSimNameMap();
+      string sim = sim_value_vect[i].first;
+      string varName;
+      float value = vect[i];
+      auto it = sim_varName.find(sim_value_vect[i].first);
+      if (it != sim_varName.end()) {
+        varName = it->second;
+        /* cout<<sim<<endl;
+         cout<<varName<<endl;
+         cout<<value<<endl;*/
+      }
+
+      if (sim_varName.find(sim) == sim_varName.end()) {
         continue;
       }
-      if (var_map->find(sim_varName.find(sim_value_vect[i].first)->second) == var_map->end()) {
+      if (s->var_map.find(varName) == s->var_map.end()) {
         continue;
       }
-      if ((var_map->find(sim_varName.find(sim_value_vect[i].first)->second)->second->getValue()
-          != sim_value_vect[i].second)
-          && ((var_map->find(sim_varName.find(sim_value_vect[i].first)->second)->second->getBoundType()) == 1)) {
-        var_map->find(sim_varName.find(sim_value_vect[i].first)->second)->second->setValue(sim_value_vect[i].second);
+      if (s->var_map.find(varName)->second->hasValue == false) {
+        s->var_map.find(varName)->second->setValue(value);
+        if (value < 0) {
+          value = -value;
+        }
+        string str = varName + "=" + to_string(value);
+        s->m_inter->setVariables(str);
+
+      } else if ((s->var_map.find(varName)->second->getValue() != value)
+          && ((s->var_map.find(varName)->second->getBoundType()) == 1)) {
+        s->var_map.find(varName)->second->setValue(value);
+        if (value < 0) {
+          value = -value;
+        }
+        string str = varName + "=" + to_string(value);
+        s->m_inter->setVariables(str);
       }
     }
 
@@ -153,13 +177,14 @@ void OpenServerCommand::receiveData() {
 //    //todo unlock
 //  }
 
-    sim_varName = buildSimNameMap(*var_map);
+    sim_varName = buildSimNameMap();
   }
 }
-unordered_map<string, string> OpenServerCommand::buildSimNameMap(unordered_map<string, Var *> &map) {
+unordered_map<string, string> OpenServerCommand::buildSimNameMap() {
+  Singleton *s = Singleton::getInstance();
   unordered_map<string, string> sim_name_map;
   unordered_map<string, Var *>::iterator it;
-  for (it = map.begin(); it != map.end(); it++) {
+  for (it = s->var_map.begin(); it != s->var_map.end(); it++) {
     sim_name_map[it->second->getSim()] = it->second->getName();
   }
   return sim_name_map;

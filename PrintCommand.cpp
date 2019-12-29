@@ -9,7 +9,7 @@
 
 using namespace std;
 
-unsigned PrintCommand::execute(vector<string>::iterator it, unordered_map<string, Var *> &var_map) {
+unsigned PrintCommand::execute(vector<string>::iterator it) {
     Singleton *s = Singleton::getInstance();
     Expression *e = nullptr;
 

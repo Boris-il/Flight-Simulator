@@ -15,7 +15,7 @@ DefineVarCommand::DefineVarCommand() {
 };
 
 // implement command execution
-unsigned DefineVarCommand::execute(vector<string>::iterator it, unordered_map<string, Var *> &var_map) {
+unsigned DefineVarCommand::execute(vector<string>::iterator it) {
     Singleton *s = Singleton::getInstance();
     Expression *e = nullptr;
 
@@ -24,8 +24,8 @@ unsigned DefineVarCommand::execute(vector<string>::iterator it, unordered_map<st
         string val_as_str = *(it + 3);
         e = s->m_inter->interpret(val_as_str);
         double value = e->calculate();
-        auto pos = var_map.find(var_name);
-        if (pos != var_map.end()) {
+      auto pos = s->var_map.find(var_name);
+      if (pos != s->var_map.end()) {
             //Var var_to_update = pos->second;
           pos->second->setValue(value);
         } else {
@@ -34,7 +34,7 @@ unsigned DefineVarCommand::execute(vector<string>::iterator it, unordered_map<st
           //Var new_var(var_name, false, 2, "");
           new_var->setValue(value);
             // insert to var map
-            var_map[var_name] = new_var;
+        s->var_map[var_name] = new_var;
           //var_map.insert({var_name, new_var});
           //var_map.emplace(var_name, *new_var);
 
@@ -64,7 +64,8 @@ unsigned DefineVarCommand::execute(vector<string>::iterator it, unordered_map<st
 
   //Var new_var(var_name, true, bound_type, sim_path);
     // insert to var map
-    var_map.emplace(var_name, new_var);
+  s->var_map[var_name] = new_var;
+  //  s->var_map.emplace(var_name, new_var);
   //var_map.insert({var_name, new_var});
   if (bound_type == 1) {
     s->m_inter->setVariables(var_name + "=" + "0");

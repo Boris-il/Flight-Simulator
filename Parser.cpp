@@ -152,14 +152,14 @@ void Parser::parse(vector<string> &commands, map<string, Command *> cmdMap) {
         auto pos = cmd_map.find(commands[i]);
         if (pos != cmd_map.end()) {
             Command *c = pos->second;
-            currentIndex = c->execute(itStart + i, this->var_map);
+          currentIndex = c->execute(itStart + i);
             i += currentIndex;
             continue;
         } else {
-            auto pos1 = this->var_map.find(commands[i]);
-            if (pos1 != this->var_map.end()) {
+          auto pos1 = s->var_map.find(commands[i]);
+          if (pos1 != s->var_map.end()) {
                 Command *c = cmd_map["var"];
-                currentIndex = c->execute(itStart + i - 1, this->var_map);
+            currentIndex = c->execute(itStart + i - 1);
                 i += (currentIndex - 1);
                 continue;
             }
@@ -169,30 +169,6 @@ void Parser::parse(vector<string> &commands, map<string, Command *> cmdMap) {
 
         }
     }
-
-
-//    auto itStart = commands.begin();
-//    unsigned currentIndex = 0;
-//    for (unsigned i = 0; i < commands.size(); i++) {
-//        auto pos = cmd_map.find(commands[i]);
-//        if (pos != cmd_map.end()) {
-//            Command *c = pos->second;
-//            currentIndex = c->execute(itStart + i, this->var_map);
-//            i += currentIndex;
-//            continue;
-//        } else {
-//            auto pos1 = this->var_map.find(commands[i]);
-//            if (pos1 != this->var_map.end()) {
-//                Command *c = cmd_map["var"];
-//                currentIndex = c->execute(itStart + i - 1, this->var_map);
-//                i += (currentIndex - 1);
-//                continue;
-//            }
-//
-//            cerr << "undefined command" << endl;
-//
-//        }
-//    }
 }
 
 
