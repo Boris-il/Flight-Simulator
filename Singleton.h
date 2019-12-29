@@ -23,8 +23,10 @@ public:
   bool shouldStop = false;
     // commands map
     map<string, Command *> m_commands_map;
+  // vatrs map
+  unordered_map<string, Var *> var_map;
 
-    static Singleton *getInstance();
+  static Singleton *getInstance();
 
 };
 

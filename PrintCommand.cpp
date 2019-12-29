@@ -9,7 +9,7 @@
 
 using namespace std;
 
-unsigned PrintCommand::execute(vector<string>::iterator it, unordered_map<string, Var> &var_map) {
+unsigned PrintCommand::execute(vector<string>::iterator it, unordered_map<string, Var *> &var_map) {
     Singleton *s = Singleton::getInstance();
     Expression *e = nullptr;
 
@@ -25,7 +25,9 @@ unsigned PrintCommand::execute(vector<string>::iterator it, unordered_map<string
             // remove spaces
             string::iterator end_pos = remove(val_as_string.begin(), val_as_string.end(), ' ');
             val_as_string.erase(end_pos, val_as_string.end());
-            // interpret
+          val_as_string.erase(std::remove(val_as_string.begin(), val_as_string.end(), '\t'), val_as_string.end());
+
+          // interpret
             e = s->m_inter->interpret(val_as_string);
             cout << e->calculate() << endl;
         } catch (const char *e) {

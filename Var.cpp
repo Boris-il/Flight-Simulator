@@ -34,3 +34,7 @@ double Var::getValue() {
 string Var::getName() {
   return this->m_var_name;
 }
+
+unsigned int Var::getBoundType() {
+  return m_bound_type;
+}

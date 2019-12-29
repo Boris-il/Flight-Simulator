@@ -48,12 +48,14 @@ public:
     double getValue();
 
   string getName();
+
+  unsigned int getBoundType();
 };
 
 class Command {
 
  public:
-  virtual unsigned execute(vector<string>::iterator, unordered_map<string, Var> &) = 0;
+  virtual unsigned execute(vector<string>::iterator, unordered_map<string, Var *> &) = 0;
 
   virtual ~Command() {};
 };
@@ -62,7 +64,7 @@ class Parser {
 
 public:
     // variables map
-    unordered_map<string, Var> var_map;
+    unordered_map<string, Var *> var_map;
 
     // constructor
     Parser() {};

@@ -21,7 +21,7 @@ class ConditionParser : public Command {
  protected:
   list<Command *> m_commands_list;
 
-  virtual unsigned execute(vector<string>::iterator, unordered_map<string, Var> &var_map) = 0;
+  virtual unsigned execute(vector<string>::iterator, unordered_map<string, Var *> &var_map) = 0;
 
   void addChild(Command *);
 
@@ -36,7 +36,7 @@ public:
 };
 
 class LoopCommand : public ConditionParser {
-  unsigned execute(vector<string>::iterator, unordered_map<string, Var> &var_map);
+  unsigned execute(vector<string>::iterator, unordered_map<string, Var *> &var_map);
 
 public:
     LoopCommand() {};
@@ -46,28 +46,28 @@ public:
 
 class OpenServerCommand : public Command {
  public:
-  unordered_map<string, Var> var_map;
+  unordered_map<string, Var *> *var_map;
   vector<pair<string, float>> sim_value_vect;
   int client_socket;
   unordered_map<string, string> sim_varName;
   OpenServerCommand() {};
 
-  unsigned execute(vector<string>::iterator, unordered_map<string, Var> &var_map);
+  unsigned execute(vector<string>::iterator, unordered_map<string, Var *> &var_map);
 
   vector<pair<string, float>> initXml();
 
   void receiveData();
 
-  unordered_map<string, string> buildSimNameMap(unordered_map<string, Var> &map);
+  unordered_map<string, string> buildSimNameMap(unordered_map<string, Var *> &map);
 };
 
 class ConnectCommand : public Command {
  public:
-  unordered_map<string, Var> var_map;
+  unordered_map<string, Var *> *var_map;
   int client_socket;
   ConnectCommand() {};
 
-  unsigned execute(vector<string>::iterator, unordered_map<string, Var> &var_map);
+  unsigned execute(vector<string>::iterator, unordered_map<string, Var *> &var_map);
 
   void setData();
 };
@@ -92,17 +92,17 @@ class DefineVarCommand : public Command {
   // define destructor
   ~DefineVarCommand();
 
-  unsigned execute(vector<string>::iterator, unordered_map<string, Var> &) override;
+  unsigned execute(vector<string>::iterator, unordered_map<string, Var *> &) override;
 };
 
 class SleepCommand : public Command {
  public:
-  unsigned int execute(vector<string>::iterator, unordered_map<string, Var> &) override;
+  unsigned int execute(vector<string>::iterator, unordered_map<string, Var *> &) override;
 };
 
 class PrintCommand : public Command {
  public:
-  unsigned int execute(vector<string>::iterator, unordered_map<string, Var> &) override;
+  unsigned int execute(vector<string>::iterator, unordered_map<string, Var *> &) override;
 };
 
 #endif //FLIGHT_SIMULATOR_COMMANDTYPES_H

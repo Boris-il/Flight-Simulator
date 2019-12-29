@@ -7,8 +7,7 @@
 #include "Singleton.h"
 #include <iostream>
 
-
-unsigned LoopCommand::execute(vector<string>::iterator it, unordered_map<string, Var> &var_map) {
+unsigned LoopCommand::execute(vector<string>::iterator it, unordered_map<string, Var *> &var_map) {
     this->makeCommandsList(it);
     string condition_str;
     unsigned currentIndex = 0;

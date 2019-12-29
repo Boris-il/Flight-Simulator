@@ -7,6 +7,7 @@
 #include "Singleton.h"
 #include <algorithm>
 #include <sstream>
+#include <map>
 
 // implement constructor
 DefineVarCommand::DefineVarCommand() {
@@ -14,7 +15,7 @@ DefineVarCommand::DefineVarCommand() {
 };
 
 // implement command execution
-unsigned DefineVarCommand::execute(vector<string>::iterator it, unordered_map<string, Var> &var_map) {
+unsigned DefineVarCommand::execute(vector<string>::iterator it, unordered_map<string, Var *> &var_map) {
     Singleton *s = Singleton::getInstance();
     Expression *e = nullptr;
 
@@ -26,13 +27,17 @@ unsigned DefineVarCommand::execute(vector<string>::iterator it, unordered_map<st
         auto pos = var_map.find(var_name);
         if (pos != var_map.end()) {
             //Var var_to_update = pos->second;
-            pos->second.setValue(value);
+          pos->second->setValue(value);
         } else {
             // create new var
-            Var new_var(var_name, false, 2, "");
-            new_var.setValue(value);
+          Var *new_var = new Var(var_name, false, 2, "");
+          //Var new_var(var_name, false, 2, "");
+          new_var->setValue(value);
             // insert to var map
             var_map[var_name] = new_var;
+          //var_map.insert({var_name, new_var});
+          //var_map.emplace(var_name, *new_var);
+
         }
         // convert the calculated double var to string
         ostringstream strs;
@@ -55,9 +60,12 @@ unsigned DefineVarCommand::execute(vector<string>::iterator it, unordered_map<st
     string::iterator end_pos = remove(sim_path.begin(), sim_path.end(), '"');
     sim_path.erase(end_pos, sim_path.end());
     // create new Var instance
-    Var new_var(var_name, true, bound_type, sim_path);
+  Var *new_var = new Var(var_name, true, bound_type, sim_path);
+
+  //Var new_var(var_name, true, bound_type, sim_path);
     // insert to var map
     var_map.emplace(var_name, new_var);
+  //var_map.insert({var_name, new_var});
   if (bound_type == 1) {
     s->m_inter->setVariables(var_name + "=" + "0");
   }
