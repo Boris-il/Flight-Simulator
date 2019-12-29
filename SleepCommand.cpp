@@ -9,10 +9,11 @@ unsigned int SleepCommand::execute(vector<string>::iterator iterator, unordered_
   unsigned index = 0;
   Expression *e;
   Interpreter *i1 = new Interpreter();
-  string timeStr = *(iterator + 2);
+  string timeStr = *(iterator + 1);
   e = i1->interpret(timeStr);
   double timeToSleep = e->calculate();
-  index = 2;
-  this_thread::sleep_for(chrono::milliseconds((int) timeToSleep));
+  index = 1;
+  int t = timeToSleep;
+  std::this_thread::sleep_for(std::chrono::milliseconds(t));
   return index;
 }

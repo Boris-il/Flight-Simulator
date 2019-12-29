@@ -164,6 +164,7 @@ void Parser::parse(vector<string> &commands, map<string, Command *> cmdMap) {
                 continue;
             }
 
+          cout << commands[i] << endl;
             cerr << "undefined command" << endl;
 
         }

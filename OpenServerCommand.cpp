@@ -59,8 +59,10 @@ unsigned OpenServerCommand::execute(vector<string>::iterator it_vec, unordered_m
   this->sim_value_vect = sim_value_vect;
   this->client_socket = client_socket;
   this->sim_varName = sim_varName;
+  //thread t1(OpenServerCommand::receiveData,var_map,sim_value_vect,sim_varName,client_socket);
   thread t1([this] { receiveData(); });
-  t1.join();
+  t1.detach();
+  //t1.join();
   // thread t1(&OpenServerCommand::receiveData, var_map, sim_value_vect, client_socket, sim_varName);
   //receiveData();
 
@@ -125,17 +127,17 @@ void OpenServerCommand::receiveData() {
         ss.ignore();
     }
 
-    for (int i = 0; i < this->sim_value_vect.size(); ++i) {
-      if (this->sim_varName.find(this->sim_value_vect[i].first) == this->sim_varName.end()) {
+    for (int i = 0; i < sim_value_vect.size(); ++i) {
+      if (sim_varName.find(sim_value_vect[i].first) == sim_varName.end()) {
         continue;
       }
-      if (var_map.find(this->sim_varName.find(this->sim_value_vect[i].first)->second) == var_map.end()) {
+      if (var_map.find(sim_varName.find(sim_value_vect[i].first)->second) == var_map.end()) {
         continue;
       }
-      if ((var_map.find(this->sim_varName.find(this->sim_value_vect[i].first)->second)->second.getValue()
-          != this->sim_value_vect[i].second)
-          && (var_map.find(this->sim_value_vect[i].first)->second.m_isBound)) {
-        var_map.find(this->sim_varName.find(this->sim_value_vect[i].first)->second)->second.setValue(this->sim_value_vect[i].second);
+      if ((var_map.find(sim_varName.find(sim_value_vect[i].first)->second)->second.getValue()
+          != sim_value_vect[i].second)
+          && (var_map.find(sim_value_vect[i].first)->second.m_isBound)) {
+        var_map.find(sim_varName.find(sim_value_vect[i].first)->second)->second.setValue(sim_value_vect[i].second);
       }
     }
 
@@ -150,6 +152,7 @@ void OpenServerCommand::receiveData() {
 //    //todo unlock
 //  }
 
+    //sim_varName = buildSimNameMap(var_map);
   }
 }
 unordered_map<string, string> OpenServerCommand::buildSimNameMap(unordered_map<string, Var> &map) {

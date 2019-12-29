@@ -17,11 +17,17 @@
 
 unsigned ConnectCommand::execute(vector<string>::iterator it, unordered_map<string, Var> &var_map) {
   unsigned index = 0;
+  string ipStr, portStr;
+  string str = *(it + 1);
+  auto pos = str.find(',');
+  if (pos != string::npos) {
+    ipStr = str.substr(1, pos - 2);
+    portStr = str.substr(pos + 1, str.length() - pos);
+  }
 
-  string ipStr = *(it + 1);
   const char *ipFinal = ipStr.data();
-  string portStr = *(it + 2);
-  index = 2;
+  // string portStr = *(it + 2);
+  index = 1;
   int port;
   Expression *e;
   Interpreter *i1 = new Interpreter();
@@ -50,34 +56,38 @@ unsigned ConnectCommand::execute(vector<string>::iterator it, unordered_map<stri
   } else {
     cout << "Client is now connected to server" << endl;
   }
-
+  this->var_map = var_map;
+  this->client_socket = client_socket;
+  //thread t2(ConnectCommand::setData,var_map,client_socket);
+  thread t2([this] { setData(); });
+  t2.detach();
   //std::thread t2(&ConnectCommand::setData, var_map, client_socket);
-  setData(var_map, client_socket);
 
   // t2.join();
 
-    /* for (int i = 0; i < 10; ++i) {
-         int is_sent = send(client_socket, "hi\n", strlen("hi\n"), 0);
-         if (is_sent == -1) {
-             cout << "Error sending message" << endl;
-         } else {
-             cout << "hi message sent to server" << endl;
-         }
-     }*/
+  /* for (int i = 0; i < 10; ++i) {
+       int is_sent = send(client_socket, "hi\n", strlen("hi\n"), 0);
+       if (is_sent == -1) {
+           cout << "Error sending message" << endl;
+       } else {
+           cout << "hi message sent to server" << endl;
+       }
+   }*/
 
-    //   close(client_socket);
+  //   close(client_socket);
 
   return index;
 }
 
-void ConnectCommand::setData(unordered_map<string, Var> &var_map, int client_socket) {
+void ConnectCommand::setData() {
   string buffer;
   Singleton *s = Singleton::getInstance();
   while (!s->shouldStop) {
     unordered_map<string, Var>::iterator it;
     for (it = var_map.begin(); it != var_map.end(); it++) {
       if (it->second.m_isBound == 0) {
-        buffer = "set " + it->second.getSim() + " " + to_string(it->second.getValue());
+        //buffer = "set " + it->second.getSim() + " " + to_string(it->second.getValue());
+        buffer = "set " + it->second.getSim() + " " + to_string(it->second.getValue()) + "\r\n";
         int is_sent = send(client_socket, &buffer, sizeof(buffer), 0);
         if (is_sent == -1) {
           cout << "Error sending message of set" << endl;
@@ -88,5 +98,3 @@ void ConnectCommand::setData(unordered_map<string, Var> &var_map, int client_soc
     }
   }
 }
-
-

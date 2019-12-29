@@ -14,19 +14,28 @@ unsigned LoopCommand::execute(vector<string>::iterator it, unordered_map<string,
     unsigned currentIndex = 0;
     auto temp_it = it;
 
+
     while (*(temp_it + 1) != "{") {
         condition_str.append(*(temp_it + 1));
         ++temp_it;
     }
     temp_it += 2;
 
+  auto temp_new = temp_it;
+  int sub;
     while (parseCondition(condition_str)) {
         for (auto list_itr = this->m_commands_list.begin(); list_itr != this->m_commands_list.end(); ++list_itr) {
             Command *c = *(list_itr);
             currentIndex = c->execute(temp_it, var_map);
             temp_it += (currentIndex + 1);
         }
+
+      sub = temp_it - temp_new;
+      temp_it = temp_new;
+
     }
+  temp_it += sub;
+
     return temp_it - it;
 }
 

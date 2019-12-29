@@ -11,7 +11,6 @@
 #include <vector>
 #include "ex3.h"
 //#include "Command.h"
-
 using namespace std;
 
 //bool shouldStop = false;

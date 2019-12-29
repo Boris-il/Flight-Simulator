@@ -45,7 +45,7 @@ unsigned DefineVarCommand::execute(vector<string>::iterator it, unordered_map<st
     }
 
     unsigned bound_type;
-    if (*(it + 2) == "<=") {
+  if (*(it + 2) == "<-") {
         bound_type = 1;
     } else {
         bound_type = 0;
@@ -58,6 +58,10 @@ unsigned DefineVarCommand::execute(vector<string>::iterator it, unordered_map<st
     Var new_var(var_name, true, bound_type, sim_path);
     // insert to var map
     var_map.emplace(var_name, new_var);
+  if (bound_type == 1) {
+    s->m_inter->setVariables(var_name + "=" + "0");
+  }
+
     // return num of indexes to proceed
     return 4;
 

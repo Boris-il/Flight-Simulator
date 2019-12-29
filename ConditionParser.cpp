@@ -7,6 +7,7 @@
 #include "ex3.h"
 #include "Singleton.h"
 #include <iostream>
+#include <algorithm>
 
 
 void ConditionParser::addChild(Command *c) {
@@ -85,7 +86,10 @@ void ConditionParser::makeCommandsList(vector<string>::iterator it) {
             if (*(it + 1) == "}") {
                 break;
             }
-            auto cmd_map_it = s->m_commands_map.find(*(it + 1));
+          string com = *(it + 1);
+          com.erase(std::remove(com.begin(), com.end(), '\t'), com.end());
+
+          auto cmd_map_it = s->m_commands_map.find(com);
             if (cmd_map_it != s->m_commands_map.end()) {
                 Command *c = cmd_map_it->second;
                 // addChild(cmd_map_it->second);

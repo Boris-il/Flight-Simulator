@@ -5,7 +5,6 @@
 #include <thread>
 #include "ex3.h"
 
-using namespace std;
 
 //static void populateCommandsMap(vector<string> *commands_from_lexer, map<string, Command *> *cmd_map) {
 //    // create each command and insert to map

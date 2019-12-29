@@ -9,7 +9,13 @@
 #include "Command.h"
 #include <thread>
 #include "ex3.h"
+#include "Singleton.h"
 #include <list>
+#include <sys/socket.h>
+#include <iostream>
+#include <sstream>
+#include <unistd.h>
+using namespace std;
 
 class ConditionParser : public Command {
  protected:
@@ -57,11 +63,13 @@ class OpenServerCommand : public Command {
 
 class ConnectCommand : public Command {
  public:
+  unordered_map<string, Var> var_map;
+  int client_socket;
   ConnectCommand() {};
 
   unsigned execute(vector<string>::iterator, unordered_map<string, Var> &var_map);
 
-  void setData(unordered_map<string, Var> &var_map, int client_socket);
+  void setData();
 };
 
 class DefineVarCommand : public Command {
