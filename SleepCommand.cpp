@@ -9,6 +9,9 @@ unsigned int SleepCommand::execute(vector<string>::iterator iterator) {
   unsigned index = 0;
   Expression *e;
   Interpreter *i1 = new Interpreter();
+  if (*iterator == "@") {
+    ++iterator;
+  }
   string timeStr = *(iterator + 1);
   e = i1->interpret(timeStr);
   double timeToSleep = e->calculate();
@@ -16,5 +19,4 @@ unsigned int SleepCommand::execute(vector<string>::iterator iterator) {
   int t = timeToSleep;
   std::this_thread::sleep_for(std::chrono::milliseconds(t));
   return index;
-
 }

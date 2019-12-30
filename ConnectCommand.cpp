@@ -82,12 +82,26 @@ void ConnectCommand::setData() {
 
   Singleton *s = Singleton::getInstance();
   while (!s->shouldStop) {
-    unordered_map<string, Var *>::iterator it;
+    s->mutex_lock.lock();
+    if (!s->q_commands_to_send.empty()) {
+      string buffer = s->q_commands_to_send.front();
+      const char *msg = buffer.c_str();
+      s->q_commands_to_send.pop();
+      int is_sent = send(client_socket, msg, strlen(msg), 0);
+      if (is_sent == -1) {
+        cout << "Error sending message of set" << endl;
+      } else {
+        cout << msg << endl;
+      }
+
+    }
+    s->mutex_lock.unlock();
+
+
+    /*unordered_map<string, Var *>::iterator it;
     for (it = s->var_map.begin(); it != s->var_map.end(); ++it) {
       if (it->second->getBoundType() == 0 && it->second->hasValue) {
         string buffer = "";
-        //buffer = "set " + it->second.getSim() + " " + to_string(it->second.getValue());
-        // buffer = "set " + it->second->getSim() + " " + to_string(it->second->getValue()) + "\r\n";
         buffer.append("set ");
         buffer.append((it->second->getSim()));
         buffer.append(" ");
@@ -107,10 +121,8 @@ void ConnectCommand::setData() {
             cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
             cout << msg << endl;
           }
-          //cout << "set message sent to server" << endl;
-          // cout << "set message : " << msg << endl;
         }
       }
-    }
+    }*/
   }
 }

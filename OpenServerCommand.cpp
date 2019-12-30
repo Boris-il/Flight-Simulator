@@ -158,9 +158,9 @@ void OpenServerCommand::receiveData() {
       } else if ((s->var_map.find(varName)->second->getValue() != value)
           && ((s->var_map.find(varName)->second->getBoundType()) == 1)) {
         s->var_map.find(varName)->second->setValue(value);
-        if (value < 0) {
-          value = -value;
-        }
+//        if (value < 0) {
+//          value = -value;
+//        }
         string str = varName + "=" + to_string(value);
         s->m_inter->setVariables(str);
       }

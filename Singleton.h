@@ -8,7 +8,7 @@
 #include "ex3.h"
 #include "ex1.h"
 #include <map>
-
+#include <mutex>
 
 class Singleton {
 private:
@@ -21,6 +21,7 @@ public:
     // interpreter member
     Interpreter *m_inter;
     bool shouldStop = false;
+  std::mutex mutex_lock;
     // commands map
     map<string, Command *> m_commands_map;
     // vars map

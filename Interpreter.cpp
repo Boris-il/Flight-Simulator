@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <cstring>
 
 using namespace std;
 
@@ -186,20 +187,35 @@ void Interpreter::infixToPostfix(string input) {
 }
 
 bool Interpreter::isNumVal(string s) {
-    int dotCount = 0;
-    for (unsigned int j = 0; j < s.length(); j++) {
-        if (!isNumber(s[j])) {
-            if (s[j] == '.') {
-                dotCount++;
-            } else {
-                return false;
-            }
-        }
-        if (dotCount > 1) {
-            return false;
-        }
+  if (s.compare("-") == 0) {
+    return false;
+  }
+  int count = 0;
+  for (unsigned int i = 0; i < s.length(); ++i) {
+    if (s[i] == '.') {
+      count++;
     }
-    return true;
+    if ((s[i] == '-') && (i != 0)) {
+      return false;
+    }
+  }
+  return (strspn(s.c_str(), ".0123456789-") == s.size() && count <= 1);
+
+
+//    int dotCount = 0;
+//    for (unsigned int j = 0; j < s.length(); j++) {
+//        if (!isNumber(s[j])) {
+//            if (s[j] == '.') {
+//                dotCount++;
+//            } else {
+//                return false;
+//            }
+//        }
+//        if (dotCount > 1) {
+//            return false;
+//        }
+//    }
+//    return true;
 }
 
 string Interpreter::getComponent(int pos, string s) {

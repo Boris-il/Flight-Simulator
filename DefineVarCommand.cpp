@@ -90,10 +90,12 @@ unsigned DefineVarCommand::execute(vector<string>::iterator it) {
 void DefineVarCommand::updateExistingVar(Singleton *s, unordered_map<string, Var *>::iterator itr, string &name_str,
                                          double value) {
     //todo lock?
+  s->mutex_lock.lock();
     //update value of Var in local map
     itr->second->setValue(value);
+  s->m_inter->setVariables(name_str + "=" + to_string(value));
     // add update command of this Var to the queue
-    string s1 = "sim ";
+  string s1 = "set ";
     s1.append(itr->second->getSim() + " ");
     s1.append(to_string(value));
     s1.append("\r\n");
@@ -101,5 +103,6 @@ void DefineVarCommand::updateExistingVar(Singleton *s, unordered_map<string, Var
     // add to the queue
     s->q_commands_to_send.push(msg);
     //todo unlock?
+  s->mutex_lock.unlock();
 
 }

@@ -27,7 +27,7 @@ vector<string> Parser::lexer(const string &fileName) {
     } else {
         while (getline(in_file, line)) {
 
-            if (condition_scope) {
+          if (condition_scope && line.find('}') == string::npos) {
                 ret_string.push_back("@");
             }
 
@@ -35,6 +35,8 @@ vector<string> Parser::lexer(const string &fileName) {
                 // remove all spaces from the line
                 string::iterator end_pos = remove(line.begin(), line.end(), ' ');
                 line.erase(end_pos, line.end());
+              // remove tab from line
+              line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
             }
 
             // parse the line

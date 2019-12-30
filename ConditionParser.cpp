@@ -9,10 +9,9 @@
 #include <iostream>
 #include <algorithm>
 
-
-void ConditionParser::addChild(Command *c) {
+/*void ConditionParser::addChild(Command *c) {
     this->m_commands_list.push_back(c);
-}
+}*/
 
 bool ConditionParser::parseCondition(const string &str) {
     Singleton *s = Singleton::getInstance();
@@ -83,11 +82,11 @@ void ConditionParser::makeCommandsList(vector<string>::iterator it) {
 
     while (*it != "}") {
         if (*it == "@") {
-            if (*(it + 1) == "}") {
-                break;
-            }
           string com = *(it + 1);
           com.erase(std::remove(com.begin(), com.end(), '\t'), com.end());
+          string::iterator end_pos = remove(com.begin(), com.end(), ' ');
+          com.erase(end_pos, com.end());
+
 
           auto cmd_map_it = s->m_commands_map.find(com);
             if (cmd_map_it != s->m_commands_map.end()) {

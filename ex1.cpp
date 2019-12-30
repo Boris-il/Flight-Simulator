@@ -116,7 +116,7 @@ Div::Div(Expression *l, Expression *r) {
 
 // define Div calculate
 double Div::calculate() {
-    if ((this->getLeft()->calculate() == 0) || this->getRight()->calculate() == 0) {
+  if (this->getRight()->calculate() == 0) {
         throw "bad input";
     } else {
         return ((this->getLeft()->calculate()) / (this->getRight()->calculate()));
