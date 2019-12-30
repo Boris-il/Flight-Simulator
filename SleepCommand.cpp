@@ -16,4 +16,5 @@ unsigned int SleepCommand::execute(vector<string>::iterator iterator) {
   int t = timeToSleep;
   std::this_thread::sleep_for(std::chrono::milliseconds(t));
   return index;
+
 }

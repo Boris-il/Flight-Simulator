@@ -31,10 +31,9 @@ unsigned PrintCommand::execute(vector<string>::iterator it) {
             e = s->m_inter->interpret(val_as_string);
             cout << e->calculate() << endl;
         } catch (const char *e) {
-            cerr << "error: unknown variable in Print function" << endl;
+            cerr << "error: could not interpret " << val_as_string << " in Print()" << endl;
         }
     }
     return 1;
-
 
 }

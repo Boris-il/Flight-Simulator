@@ -20,13 +20,15 @@ private:
 public:
     // interpreter member
     Interpreter *m_inter;
-  bool shouldStop = false;
+    bool shouldStop = false;
     // commands map
     map<string, Command *> m_commands_map;
-  // vatrs map
-  unordered_map<string, Var *> var_map;
+    // vars map
+    unordered_map<string, Var *> var_map;
+    // queue of set commands to send to the server
+    queue<string> q_commands_to_send;
 
-  static Singleton *getInstance();
+    static Singleton *getInstance();
 
 };
 
