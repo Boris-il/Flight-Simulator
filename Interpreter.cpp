@@ -43,19 +43,14 @@ Expression *Interpreter::interpret(string input) {
             this->expStack.pop();
             // which operator?
             switch (op) {
-                case '+':
-                    tempExp = new Plus(tempLeftExp, tempRightExp);
+                case '+':tempExp = new Plus(tempLeftExp, tempRightExp);
                     break;
-                case '-':
-                    tempExp = new Minus(tempLeftExp, tempRightExp);
+                case '-':tempExp = new Minus(tempLeftExp, tempRightExp);
                     break;
-                case '*':
-                    tempExp = new Mul(tempLeftExp, tempRightExp);
+                case '*':tempExp = new Mul(tempLeftExp, tempRightExp);
                     break;
-                case '/':
-                    tempExp = new Div(tempLeftExp, tempRightExp);
-                default:
-                    break;
+                case '/':tempExp = new Div(tempLeftExp, tempRightExp);
+                default:break;
             }
             // push new Expression to stack
             this->expStack.push(tempExp);
@@ -78,7 +73,6 @@ double Interpreter::getVarValue(string var) {
         throw "bad input";
     }
 }
-
 
 void Interpreter::setVariables(string input) {
     string sub;
@@ -187,19 +181,19 @@ void Interpreter::infixToPostfix(string input) {
 }
 
 bool Interpreter::isNumVal(string s) {
-  if (s.compare("-") == 0) {
-    return false;
-  }
-  int count = 0;
-  for (unsigned int i = 0; i < s.length(); ++i) {
-    if (s[i] == '.') {
-      count++;
+    if (s.compare("-") == 0) {
+        return false;
     }
-    if ((s[i] == '-') && (i != 0)) {
-      return false;
+    int count = 0;
+    for (unsigned int i = 0; i < s.length(); ++i) {
+        if (s[i] == '.') {
+            count++;
+        }
+        if ((s[i] == '-') && (i != 0)) {
+            return false;
+        }
     }
-  }
-  return (strspn(s.c_str(), ".0123456789-") == s.size() && count <= 1);
+    return (strspn(s.c_str(), ".0123456789-") == s.size() && count <= 1);
 
 
 //    int dotCount = 0;

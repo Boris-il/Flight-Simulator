@@ -17,8 +17,10 @@ Singleton *Singleton::getInstance() {
 }
 
 Singleton::Singleton() {
+    // create an instance of interpreter
     this->m_inter = new Interpreter();
 
+    // create constant map of commands that are used in Parser
     Command *def = new DefineVarCommand();
     this->m_commands_map["var"] = def;
     Command *cnt = new ConnectCommand();

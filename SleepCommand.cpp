@@ -6,17 +6,21 @@
 #include "chrono"
 
 unsigned int SleepCommand::execute(vector<string>::iterator iterator) {
-  unsigned index = 0;
-  Expression *e;
-  Interpreter *i1 = new Interpreter();
-  if (*iterator == "@") {
-    ++iterator;
-  }
-  string timeStr = *(iterator + 1);
-  e = i1->interpret(timeStr);
-  double timeToSleep = e->calculate();
-  index = 1;
-  int t = timeToSleep;
-  std::this_thread::sleep_for(std::chrono::milliseconds(t));
-  return index;
+    Expression *e;
+    Interpreter *i1 = new Interpreter();
+    if (*iterator == "@") {
+        ++iterator;
+    }
+    string timeStr = *(iterator + 1);
+    try {
+        e = i1->interpret(timeStr);
+        double timeToSleep = e->calculate();
+        int t = timeToSleep;
+        std::this_thread::sleep_for(std::chrono::milliseconds(t));
+
+    } catch (const char *e) {
+        cerr << "could not interpret " << timeStr << " in SleepCommand" << endl;
+    }
+
+    return 1;
 }

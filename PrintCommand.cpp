@@ -25,9 +25,9 @@ unsigned PrintCommand::execute(vector<string>::iterator it) {
             // remove spaces
             string::iterator end_pos = remove(val_as_string.begin(), val_as_string.end(), ' ');
             val_as_string.erase(end_pos, val_as_string.end());
-          val_as_string.erase(std::remove(val_as_string.begin(), val_as_string.end(), '\t'), val_as_string.end());
+            val_as_string.erase(std::remove(val_as_string.begin(), val_as_string.end(), '\t'), val_as_string.end());
 
-          // interpret
+            // interpret
             e = s->m_inter->interpret(val_as_string);
             cout << e->calculate() << endl;
         } catch (const char *e) {

@@ -13,7 +13,6 @@
 
 using namespace std;
 
-
 // implement lexer
 vector<string> Parser::lexer(const string &fileName) {
     string line, sub_command, sub_value;
@@ -25,9 +24,11 @@ vector<string> Parser::lexer(const string &fileName) {
     if (!in_file.is_open()) {
         cerr << "File open error" << endl;
     } else {
+
+        // lexer for the fly.txt file
         while (getline(in_file, line)) {
 
-          if (condition_scope && line.find('}') == string::npos) {
+            if (condition_scope && line.find('}') == string::npos) {
                 ret_string.push_back("@");
             }
 
@@ -35,8 +36,8 @@ vector<string> Parser::lexer(const string &fileName) {
                 // remove all spaces from the line
                 string::iterator end_pos = remove(line.begin(), line.end(), ' ');
                 line.erase(end_pos, line.end());
-              // remove tab from line
-              line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+                // remove tab from line
+                line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
             }
 
             // parse the line
@@ -144,29 +145,30 @@ vector<string> Parser::lexer(const string &fileName) {
 
 // implement parser
 void Parser::parse(vector<string> &commands, map<string, Command *> cmdMap) {
-
     Singleton *s = Singleton::getInstance();
     map<string, Command *> cmd_map = (s->m_commands_map);
 
+    // iteration over each line of commands in fly.txt and executing them
     auto itStart = commands.begin();
     unsigned currentIndex = 0;
     for (unsigned i = 0; i < commands.size(); i++) {
         auto pos = cmd_map.find(commands[i]);
         if (pos != cmd_map.end()) {
             Command *c = pos->second;
-          currentIndex = c->execute(itStart + i);
+            currentIndex = c->execute(itStart + i);
             i += currentIndex;
             continue;
         } else {
-          auto pos1 = s->var_map.find(commands[i]);
-          if (pos1 != s->var_map.end()) {
+            // if command is not defined, check if the variable already exists and execute DefineVarCommand
+            auto pos1 = s->var_map.find(commands[i]);
+            if (pos1 != s->var_map.end()) {
                 Command *c = cmd_map["var"];
-            currentIndex = c->execute(itStart + i - 1);
+                currentIndex = c->execute(itStart + i - 1);
                 i += (currentIndex - 1);
                 continue;
             }
 
-          cout << commands[i] << endl;
+            cout << commands[i] << endl;
             cerr << "undefined command" << endl;
 
         }

@@ -11,27 +11,26 @@
 #include <mutex>
 
 class Singleton {
-private:
-    static Singleton *instance;
+ private:
+  static Singleton *instance;
 
-    // constructor
-    Singleton();
+  // constructor
+  Singleton();
 
-public:
-    // interpreter member
-    Interpreter *m_inter;
-    bool shouldStop = false;
+ public:
+  // interpreter member
+  Interpreter *m_inter;
+  bool shouldStop = false;
   std::mutex mutex_lock;
-    // commands map
-    map<string, Command *> m_commands_map;
-    // vars map
-    unordered_map<string, Var *> var_map;
-    // queue of set commands to send to the server
-    queue<string> q_commands_to_send;
+  // commands map
+  map<string, Command *> m_commands_map;
+  // vars map
+  unordered_map<string, Var *> var_map;
+  // queue of set commands to send to the server
+  queue<string> q_commands_to_send;
 
-    static Singleton *getInstance();
+  static Singleton *getInstance();
 
 };
-
 
 #endif //FLIGHT_SIMULATOR_SINGLETON_H

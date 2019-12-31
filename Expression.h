@@ -9,11 +9,10 @@ using namespace std;
 
 class Expression {
 
-public:
-    virtual double calculate() = 0;
+ public:
+  virtual double calculate() = 0;
 
-    virtual ~Expression() {};
+  virtual ~Expression() {};
 };
-
 
 #endif //FLIGHT_SIMULATOR_EXPRESSION_H

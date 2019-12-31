@@ -23,19 +23,21 @@ bool Var::operator==(const Var &v) const {
 
 void Var::setValue(double num) {
     this->value = num;
-  this->hasValue = true;
+    this->hasValue = true;
 }
+
 string Var::getSim() {
-  return this->m_simPath;
+    return this->m_simPath;
 }
+
 double Var::getValue() {
-  return this->value;
+    return this->value;
 }
 
 string Var::getName() {
-  return this->m_var_name;
+    return this->m_var_name;
 }
 
 unsigned int Var::getBoundType() {
-  return m_bound_type;
+    return m_bound_type;
 }

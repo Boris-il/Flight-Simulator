@@ -16,36 +16,36 @@ using namespace std;
 //bool shouldStop = false;
 
 class Var {
-    string m_var_name, m_simPath;
+  string m_var_name, m_simPath;
 
-    // "0" for ->
-    // "1" for <-
-    // "2" for not bound
-    unsigned m_bound_type = 0, m_scope = 0;
+  // "0" for ->
+  // "1" for <-
+  // "2" for not bound
+  unsigned m_bound_type = 0, m_scope = 0;
   double value;
 
-public:
-    bool m_isBound = false;
+ public:
+  bool m_isBound = false;
   bool hasValue = false;
-    // constructor
-    Var(string var_name, bool isBound, unsigned bound_type, string simPath);
+  // constructor
+  Var(string var_name, bool isBound, unsigned bound_type, string simPath);
 
-    // constructor
-    Var() {};
+  // constructor
+  Var() {};
 
-    Var(string var_name, unsigned scope, Var *v);
+  Var(string var_name, unsigned scope, Var *v);
 
-    // destructor
-    ~Var() {};
+  // destructor
+  ~Var() {};
 
-    // operator ==
-    bool operator==(const Var &v) const;
+  // operator ==
+  bool operator==(const Var &v) const;
 
-    void setValue(double num);
+  void setValue(double num);
 
-    string getSim();
+  string getSim();
 
-    double getValue();
+  double getValue();
 
   string getName();
 
@@ -62,32 +62,22 @@ class Command {
 
 class Parser {
 
-public:
-    // variables map
+ public:
+  // variables map
   // unordered_map<string, Var *> var_map;
 
-    // constructor
-    Parser() {};
+  // constructor
+  Parser() {};
 
-    // destructor
-    ~Parser() {};
+  // destructor
+  ~Parser() {};
 
-    // lexer func declaration
-    static vector<string> lexer(const string &);
+  // lexer func declaration
+  static vector<string> lexer(const string &);
 
-    // parse func declaration
-    void parse(vector<string> &, map<string, Command *>);
+  // parse func declaration
+  void parse(vector<string> &, map<string, Command *>);
 };
-
-
-//class myHashFunction {
-//public:
-//    // string name is returned as hash function
-//    string operator()(const Var& v) const {
-//        return v.m_var_name;
-//    }
-//};
-static void populateCommandsMap(vector<string> *, map<string, Command *>);
 
 
 #endif //FLIGHT_SIMULATOR_EX3_H

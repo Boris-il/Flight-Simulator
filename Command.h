@@ -8,8 +8,6 @@
 #include <vector>
 #include <string>
 
-
 using namespace std;
-
 
 #endif //FLIGHT_SIMULATOR_COMMAND_H

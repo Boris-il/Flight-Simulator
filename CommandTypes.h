@@ -19,93 +19,102 @@
 using namespace std;
 
 class ConditionParser : public Command {
-protected:
-    list<Command *> m_commands_list;
+ protected:
+  list<Command *> m_commands_list;
 
-    virtual unsigned execute(vector<string>::iterator) = 0;
+  virtual unsigned execute(vector<string>::iterator) = 0;
 
-    static bool parseCondition(const string &);
+  static bool parseCondition(const string &);
 
-    void makeCommandsList(vector<string>::iterator);
+  void makeCommandsList(vector<string>::iterator);
 
-public:
-    ConditionParser() {};
+ public:
+  ConditionParser() {};
 
-    ~ConditionParser() {};
+  ~ConditionParser() {};
 };
 
 class LoopCommand : public ConditionParser {
-    unsigned execute(vector<string>::iterator);
+  unsigned execute(vector<string>::iterator);
 
-public:
-    LoopCommand() {};
+ public:
+  LoopCommand() {};
 
-    ~LoopCommand() {};
+  ~LoopCommand() {};
+};
+
+class IfCommand : public ConditionParser {
+  unsigned execute(vector<string>::iterator);
+
+ public:
+  IfCommand() {};
+
+  ~IfCommand() {};
 };
 
 class OpenServerCommand : public Command {
-public:
-    //unordered_map<string, Var *> *var_map;
-    vector<pair<string, float>> sim_value_vect;
-    int client_socket;
-    unordered_map<string, string> sim_varName;
+ public:
+  //unordered_map<string, Var *> *var_map;
+  vector<pair<string, float>> sim_value_vect;
+  int client_socket;
+  unordered_map<string, string> sim_varName;
 
-    OpenServerCommand() {};
+  OpenServerCommand() {};
 
-    unsigned execute(vector<string>::iterator);
+  unsigned execute(vector<string>::iterator);
 
-    vector<pair<string, float>> initXml();
+  vector<pair<string, float>> initXml();
 
-    void receiveData();
+  void receiveData();
 
-    unordered_map<string, string> buildSimNameMap();
+  unordered_map<string, string> buildSimNameMap();
 };
 
 class ConnectCommand : public Command {
-public:
-    //unordered_map<string, Var *> *var_map;
-    int client_socket;
+ public:
+  //unordered_map<string, Var *> *var_map;
+  int client_socket;
 
-    ConnectCommand() {};
+  ConnectCommand() {};
 
-    unsigned execute(vector<string>::iterator);
+  unsigned execute(vector<string>::iterator);
 
-    void setData();
+  void setData();
 };
 
 class DefineVarCommand : public Command {
-    void updateExistingVar(Singleton *, unordered_map<string, Var *>::iterator, string &, double);
+  void updateExistingVar(Singleton *, unordered_map<string, Var *>::iterator, string &, double);
 
-protected:
-    Var *v;
-    string m_sim_path, m_var_name;
-    // "0" for ->
-    // "1" for <-
-    unsigned m_bound_type = 0;
-    unsigned m_scope = 0;
-    // is it bound to simulator variable? (var can be custom made)
-    bool m_isBound = false;
+ protected:
+  Var *v;
+  string m_sim_path, m_var_name;
+  // "0" for ->
+  // "1" for <-
+  unsigned m_bound_type = 0;
+  unsigned m_scope = 0;
+  // is it bound to simulator variable? (var can be custom made)
+  bool m_isBound = false;
 
-public:
-    // define constructor
-    //DefineVarCommand(Parser &, const string &, const string &, unsigned, unsigned, bool, Var &);
-    //DefineVarCommand(vector<string> *);
-    DefineVarCommand();
+ public:
+  // define constructor
+  //DefineVarCommand(Parser &, const string &, const string &, unsigned, unsigned, bool, Var &);
+  //DefineVarCommand(vector<string> *);
+  DefineVarCommand();
 
-    // define destructor
-    ~DefineVarCommand();
+  // define destructor
+  ~DefineVarCommand();
 
-    unsigned execute(vector<string>::iterator) override;
+  unsigned execute(vector<string>::iterator) override;
 };
 
 class SleepCommand : public Command {
-public:
-    unsigned int execute(vector<string>::iterator) override;
+ public:
+  unsigned int execute(vector<string>::iterator) override;
 };
 
 class PrintCommand : public Command {
-public:
-    unsigned int execute(vector<string>::iterator) override;
+ public:
+  unsigned int execute(vector<string>::iterator) override;
 };
 
 #endif //FLIGHT_SIMULATOR_COMMANDTYPES_H
