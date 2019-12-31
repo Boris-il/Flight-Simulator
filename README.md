@@ -1,4 +1,4 @@
-## Welcome To Our FlightGear Simulator Interpreter!
+## Welcome To FlightGear Simulator Interpreter!
 **The following documentation refers to an ongoing project as part of our CS major in Bar Ilan University.** 
 
 
