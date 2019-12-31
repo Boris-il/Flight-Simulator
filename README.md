@@ -18,7 +18,8 @@ Written in `C++`.
 ### Key Features
 * Sending and Recieving data via socket connection.
 * Multi-Threading implementation.
-* Wide usage of C++ STL library.
+* Usage of C++ STL library.
+* Usage of I/O libraries.
 * Organized work using Github repository.
 
 ### Installation
