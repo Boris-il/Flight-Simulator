@@ -28,6 +28,8 @@ class Singleton {
   unordered_map<string, Var *> var_map;
   // queue of set commands to send to the server
   queue<string> q_commands_to_send;
+  int socketNumber1;
+  int socketNumber2;
 
   static Singleton *getInstance();
 

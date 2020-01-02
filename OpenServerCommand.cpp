@@ -54,28 +54,14 @@ unsigned OpenServerCommand::execute(vector<string>::iterator it_vec) {
         cerr << "Error accepting client" << endl;
         //return -4;
     }
-    vector<pair<string, float>> sim_value_vect = initXml();
-    unordered_map<string, string> sim_varName = buildSimNameMap();
+
+  vector<pair<string, float>> sim_value_vect = initXml();  //create vector by the sims in XML file.
+  unordered_map<string, string> sim_varName = buildSimNameMap();  //create map of sim and name of vars.
     this->sim_value_vect = sim_value_vect;
     this->client_socket = client_socket;
     this->sim_varName = sim_varName;
-    //thread t1(OpenServerCommand::receiveData,var_map,sim_value_vect,sim_varName,client_socket);
     thread t1([this] { receiveData(); });
     t1.detach();
-    //t1.join();
-    // thread t1(&OpenServerCommand::receiveData, var_map, sim_value_vect, client_socket, sim_varName);
-    //receiveData();
-
-/*
-    while (x == 1) {
-        char buffer[1024] = {0};
-        int valread = read(client_socket, buffer, 1024);
-        cout << buffer << endl;
-        if (buffer[0] == 'S') {
-            x = 0;
-        }
-    }*/
-    // close(socketfd);
 
     return index;
 }
@@ -83,20 +69,18 @@ unsigned OpenServerCommand::execute(vector<string>::iterator it_vec) {
 vector<pair<string, float>> OpenServerCommand::initXml() {
     vector<pair<string, float>> sim_value_vect;
     string line;
-    // map<string, float> sim_Vars;
     fstream in;
     in.open("/usr/share/games/flightgear/Protocol/generic_small.xml", ios::in);
     if (!in.is_open()) {
         cout << "open file fails" << endl;
     } else {
-        while (getline(in, line)) {
+      while (getline(in, line)) { //run over XML file.
             string::iterator end_pos = remove(line.begin(), line.end(), ' ');
             line.erase(end_pos, line.end());
-            if (line.rfind("<node>", 0) == 0) {
+        if (line.rfind("<node>", 0) == 0) { //sim path in <node> tag.
                 string sim = line.substr(6, line.length() - 14);
                 //todo this map is not in order of the XML because it sorts it alphabetically (not good). Maybe we should use vector?
                 sim_value_vect.push_back(make_pair(sim, 0));
-                //   sim_Vars[sim] = 0;
             }
 
         }
@@ -111,6 +95,7 @@ vector<pair<string, float>> OpenServerCommand::initXml() {
 void OpenServerCommand::receiveData() {
 
     Singleton *s = Singleton::getInstance();
+  s->socketNumber1 = client_socket;
     while (!s->shouldStop) {
         //todo lock
         char line[1024] = {0};
@@ -121,7 +106,7 @@ void OpenServerCommand::receiveData() {
         std::stringstream ss(line);
         float i;
 
-        while (ss >> i) {
+      while (ss >> i) { //ignor commas and push to vector.
             vect.push_back(i);
 
             if (ss.peek() == ',')
@@ -129,7 +114,7 @@ void OpenServerCommand::receiveData() {
         }
 
         for (int i = 0; i < sim_value_vect.size(); ++i) {
-            sim_varName = buildSimNameMap();
+          sim_varName = buildSimNameMap(); //update map
             string sim = sim_value_vect[i].first;
             string varName;
             float value = vect[i];
@@ -138,17 +123,17 @@ void OpenServerCommand::receiveData() {
                 varName = it->second;
             }
 
-            if (sim_varName.find(sim) == sim_varName.end()) {
+          if (sim_varName.find(sim) == sim_varName.end()) { //non-exist element
                 continue;
             }
-            if (s->var_map.find(varName) == s->var_map.end()) {
+          if (s->var_map.find(varName) == s->var_map.end()) { //non-exist element
                 continue;
             }
             if (s->var_map.find(varName)->second->hasValue == false) {
                 s->var_map.find(varName)->second->setValue(value);
-                if (value < 0) {
-                    value = -value;
-                }
+              /*if (value < 0) {
+                  value = -value;
+              }*/
                 string str = varName + "=" + to_string(value);
                 s->m_inter->setVariables(str);
 
@@ -162,8 +147,7 @@ void OpenServerCommand::receiveData() {
                 s->m_inter->setVariables(str);
             }
         }
-
-        for (std::size_t i = 0; i < vect.size(); i++) {
+      for (std::size_t i = 0; i < vect.size(); i++) { // print all values.
             cout << vect[i];
             if (i < vect.size() - 1) {
                 cout << ",";

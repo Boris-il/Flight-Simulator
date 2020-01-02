@@ -33,11 +33,8 @@ unsigned ConnectCommand::execute(vector<string>::iterator it) {
     Interpreter *i1 = new Interpreter();
     e = i1->interpret(portStr);
     port = (int) e->calculate();
-    //std::thread t2(&ConnectCommand::ConnectStart, this);
-    //t2.join();
-    //ConnectStart();
 
-
+  //create socket
     int client_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (client_socket == -1) {
         cerr << "could not create a socket" << endl;
@@ -47,7 +44,6 @@ unsigned ConnectCommand::execute(vector<string>::iterator it) {
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = inet_addr(ipFinal);
     address.sin_port = htons(port);
-    //memset(address.sin_zero, '\0', sizeof(address.sin_zero));
 
     int is_connect = connect(client_socket, (struct sockaddr *) &address, sizeof(address));
     if (is_connect == -1) {
@@ -57,23 +53,8 @@ unsigned ConnectCommand::execute(vector<string>::iterator it) {
         cout << "Client is now connected to server" << endl;
     }
     this->client_socket = client_socket;
-    //thread t2(ConnectCommand::setData,var_map,client_socket);
     thread t2([this] { setData(); });
     t2.detach();
-    //std::thread t2(&ConnectCommand::setData, var_map, client_socket);
-
-    // t2.join();
-
-    /* for (int i = 0; i < 10; ++i) {
-         int is_sent = send(client_socket, "hi\n", strlen("hi\n"), 0);
-         if (is_sent == -1) {
-             cout << "Error sending message" << endl;
-         } else {
-             cout << "hi message sent to server" << endl;
-         }
-     }*/
-
-    //   close(client_socket);
 
     return index;
 }
@@ -81,8 +62,12 @@ unsigned ConnectCommand::execute(vector<string>::iterator it) {
 void ConnectCommand::setData() {
 
     Singleton *s = Singleton::getInstance();
+  s->socketNumber2 = client_socket;
+  //program is running.
     while (!s->shouldStop) {
         s->mutex_lock.lock();
+
+      //set command is ready to be sent.
         if (!s->q_commands_to_send.empty()) {
             string buffer = s->q_commands_to_send.front();
             const char *msg = buffer.c_str();
@@ -96,33 +81,5 @@ void ConnectCommand::setData() {
 
         }
         s->mutex_lock.unlock();
-
-
-        /*unordered_map<string, Var *>::iterator it;
-        for (it = s->var_map.begin(); it != s->var_map.end(); ++it) {
-          if (it->second->getBoundType() == 0 && it->second->hasValue) {
-            string buffer = "";
-            buffer.append("set ");
-            buffer.append((it->second->getSim()));
-            buffer.append(" ");
-            string valueAsStr = to_string(it->second->getValue());
-            valueAsStr.append("\r\n");
-            buffer.append(valueAsStr);
-            //buffer.append(to_string(it->second->getValue()));
-            //buffer.append("\r\n");
-            char msg[buffer.length() + 1];
-            strcpy(msg, buffer.c_str());
-            int is_sent = send(client_socket, msg, strlen(msg), 0);
-            if (is_sent == -1) {
-              cout << "Error sending message of set" << endl;
-            } else {
-              // cout << msg << endl;
-              if (it->second->getValue() == 32000) {
-                cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
-                cout << msg << endl;
-              }
-            }
-          }
-        }*/
     }
 }

@@ -18,6 +18,9 @@ int main(int argc, char *argv[]) {
     commands_from_lexer = Parser::lexer(argv[1]);
     // parse the commands vector
     p.parse(commands_from_lexer, cmd_map);
+  s->shouldStop = true;
+  close(s->socketNumber2);
+  close(s->socketNumber1);
 
     return 0;
 }
