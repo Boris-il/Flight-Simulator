@@ -22,7 +22,7 @@ vector<string> Parser::lexer(const string &fileName) {
     bool condition_scope = false;
     in_file.open(fileName, ios::in);
     if (!in_file.is_open()) {
-        cerr << "File open error" << endl;
+        throw "File Open Error";
     } else {
 
         // lexer for the fly.txt file
@@ -130,17 +130,19 @@ vector<string> Parser::lexer(const string &fileName) {
                 continue;
             }
 
-            pos = line.find('(');
-            if (pos != string::npos) {
-                sub_command = line.substr(0, pos);
-                ret_string.push_back(sub_command);
-                sub_value = line.substr(pos + 1, (line.length() - 1) - (pos + 1));
-                ret_string.push_back(sub_value);
-                continue;
-            }
+          pos = line.find('(');
+          if (pos != string::npos) {
+            sub_command = line.substr(0, pos);
+            ret_string.push_back(sub_command);
+            sub_value = line.substr(pos + 1, (line.length() - 1) - (pos + 1));
+            ret_string.push_back(sub_value);
+            continue;
+          }
         }
     }
-    return ret_string;
+  // close the fly.txt file
+  in_file.close();
+  return ret_string;
 }
 
 // implement parser

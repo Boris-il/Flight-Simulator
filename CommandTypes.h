@@ -57,6 +57,7 @@ class OpenServerCommand : public Command {
   //unordered_map<string, Var *> *var_map;
   vector<pair<string, float>> sim_value_vect;
   int client_socket;
+  int port;
   unordered_map<string, string> sim_varName;
 
   OpenServerCommand() {};
@@ -66,6 +67,8 @@ class OpenServerCommand : public Command {
   vector<pair<string, float>> initXml();
 
   void receiveData();
+
+  void startSocket();
 
   unordered_map<string, string> buildSimNameMap();
 };
