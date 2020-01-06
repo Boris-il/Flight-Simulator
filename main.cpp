@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     }
     commands_from_lexer = Parser::lexer(argv[1]);
     // parse the commands vector
-    p.parse(commands_from_lexer, cmd_map);
+    p.parse(commands_from_lexer);
   } catch (const char *c) {
     cerr << c << endl;
   }

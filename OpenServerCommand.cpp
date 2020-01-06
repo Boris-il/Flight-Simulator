@@ -16,7 +16,7 @@
 #include "Singleton.h"
 
 unsigned OpenServerCommand::execute(vector<string>::iterator it_vec) {
-  Singleton *s = Singleton::getInstance();
+  //Singleton *s = Singleton::getInstance();
   unsigned index = 0;
   Expression *e;
   Interpreter *i1 = new Interpreter();
@@ -25,13 +25,13 @@ unsigned OpenServerCommand::execute(vector<string>::iterator it_vec) {
   this->port = (int) e->calculate();
   index = 1;
 
-  //std::thread t1(&OpenServerCommand::startSocket, this);
-  //t1.join();
-  //startSocket();
-
   thread t0([this] { startSocket(); });
   t0.join();
 
+  vector<pair<string, float>> sim_value_vect1 = initXml();  //create vector by the sims in XML file.
+  unordered_map<string, string> sim_varName1 = buildSimNameMap();  //create map of sim and name of vars.
+  this->sim_value_vect = sim_value_vect1;
+  this->sim_varName = sim_varName1;
   thread t1([this] { receiveData(); });
   t1.detach();
 
@@ -39,7 +39,7 @@ unsigned OpenServerCommand::execute(vector<string>::iterator it_vec) {
 }
 
 vector<pair<string, float>> OpenServerCommand::initXml() {
-  vector<pair<string, float>> sim_value_vect;
+  vector<pair<string, float>> sim_value_vect2;
   string line;
   fstream in;
   in.open("/usr/share/games/flightgear/Protocol/generic_small.xml", ios::in);
@@ -51,15 +51,16 @@ vector<pair<string, float>> OpenServerCommand::initXml() {
       line.erase(end_pos, line.end());
       if (line.rfind("<node>", 0) == 0) { //sim path in <node> tag.
         string sim = line.substr(6, line.length() - 14);
-        sim_value_vect.push_back(make_pair(sim, 0));
+        //todo this map is not in order of the XML because it sorts it alphabetically (not good). Maybe we should use vector?
+        sim_value_vect2.push_back(make_pair(sim, 0));
       }
 
     }
   }
-  if (sim_value_vect.size() != 36) {
-    cout << "bad xml input, vector size is:%d" << sim_value_vect.size() << endl;
-  }
-  return sim_value_vect;
+  /*if (sim_value_vect2.size() != 36) {
+    cout << "bad xml input, vector size is:%d" << sim_value_vect2.size() << endl;
+  }*/
+  return sim_value_vect2;
 
 }
 
@@ -67,14 +68,18 @@ void OpenServerCommand::receiveData() {
 
   Singleton *s = Singleton::getInstance();
   s->socketNumber1 = client_socket;
+  string buffer = "";
   while (!s->shouldStop) {
-    //todo lock
-    char line[1024] = {0};
-    int valread = read(client_socket, line, 1024);
-
     std::vector<float> vect;
+    //todo lock
+    char line[1024] = {0}; //1,1,1,1,1,1,1\n1,1,1,1
+    read(client_socket, line, 1024);
+    string buffer2 = line;
+    buffer = buffer + buffer2;
+    string firstN = buffer.substr(0, buffer.find("\n"));
+    string secondN = buffer.substr(buffer.find("\n") + 1, buffer.length());
 
-    std::stringstream ss(line);
+    std::stringstream ss(firstN);
     float i;
 
     while (ss >> i) { //ignor commas and push to vector.
@@ -84,12 +89,12 @@ void OpenServerCommand::receiveData() {
         ss.ignore();
     }
 
-    for (int i = 0; i < sim_value_vect.size(); ++i) {
+    for (unsigned long k = 0; k < sim_value_vect.size(); ++k) {
       sim_varName = buildSimNameMap(); //update map
-      string sim = sim_value_vect[i].first;
+      string sim = sim_value_vect[k].first;
       string varName;
-      float value = vect[i];
-      auto it = sim_varName.find(sim_value_vect[i].first);
+      float value = vect[k];
+      auto it = sim_varName.find(sim_value_vect[k].first);
       if (it != sim_varName.end()) {
         varName = it->second;
       }
@@ -109,7 +114,7 @@ void OpenServerCommand::receiveData() {
         s->m_inter->setVariables(str);
 
       } else if ((s->var_map.find(varName)->second->getValue() != value)
-        && ((s->var_map.find(varName)->second->getBoundType()) == 1)) {
+          && ((s->var_map.find(varName)->second->getBoundType()) == 1)) {
         s->var_map.find(varName)->second->setValue(value);
 //        if (value < 0) {
 //          value = -value;
@@ -118,18 +123,20 @@ void OpenServerCommand::receiveData() {
         s->m_inter->setVariables(str);
       }
     }
-    for (std::size_t i = 0; i < vect.size(); i++) { // print all values.
+    //print values
+    /*for (std::size_t i = 0; i < vect.size(); i++) { // print all values.
       cout << vect[i];
-      if (i < vect.size() - 1) {
-        cout << ",";
-      }
-    }
-    cout << endl;
+       if (i < vect.size() - 1) {
+         cout << ",";
+       }
+     }
+      cout << endl;*/
 
 //    //todo unlock
 //  }
 
     sim_varName = buildSimNameMap();
+    buffer = secondN;
   }
 }
 unordered_map<string, string> OpenServerCommand::buildSimNameMap() {
@@ -163,16 +170,12 @@ void OpenServerCommand::startSocket() {
     // return -3;
   }
 
-  int client_socket = accept(socketfd, (struct sockaddr *) &address, (socklen_t *) &address);
-  if (client_socket == -1) {
+  int client_socket1 = accept(socketfd, (struct sockaddr *) &address, (socklen_t *) &address);
+  if (client_socket1 == -1) {
     cerr << "Error accepting client" << endl;
     //return -4;
   }
+  this->client_socket = client_socket1;
 
-  vector<pair<string, float>> sim_value_vect = initXml();  //create vector by the sims in XML file.
-  unordered_map<string, string> sim_varName = buildSimNameMap();  //create map of sim and name of vars.
-  this->sim_value_vect = sim_value_vect;
-  this->client_socket = client_socket;
-  this->sim_varName = sim_varName;
 }
 

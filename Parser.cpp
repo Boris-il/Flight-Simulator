@@ -146,7 +146,7 @@ vector<string> Parser::lexer(const string &fileName) {
 }
 
 // implement parser
-void Parser::parse(vector<string> &commands, map<string, Command *> cmdMap) {
+void Parser::parse(vector<string> &commands) {
     Singleton *s = Singleton::getInstance();
     map<string, Command *> cmd_map = (s->m_commands_map);
 

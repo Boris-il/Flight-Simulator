@@ -19,6 +19,8 @@ unsigned PrintCommand::execute(vector<string>::iterator it) {
 
     string val_as_string = *(it + 1);
     if (val_as_string.at(0) == '"') {
+      string::iterator end_pos = remove(val_as_string.begin(), val_as_string.end(), '"');
+      val_as_string.erase(end_pos, val_as_string.end());
         cout << val_as_string << endl;
     } else {
         try {
@@ -30,7 +32,7 @@ unsigned PrintCommand::execute(vector<string>::iterator it) {
             // interpret
             e = s->m_inter->interpret(val_as_string);
             cout << e->calculate() << endl;
-        } catch (const char *e) {
+        } catch (const char *ex) {
             cerr << "error: could not interpret " << val_as_string << " in Print()" << endl;
         }
     }

@@ -18,7 +18,7 @@ unsigned int SleepCommand::execute(vector<string>::iterator iterator) {
         int t = timeToSleep;
       std::this_thread::sleep_for(std::chrono::milliseconds(t)); //sleep command.
 
-    } catch (const char *e) {
+    } catch (const char *ex) {
         cerr << "could not interpret " << timeStr << " in SleepCommand" << endl;
     }
 

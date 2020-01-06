@@ -12,7 +12,7 @@
 // implement constructor
 DefineVarCommand::DefineVarCommand() {
     this->v = nullptr;
-};
+}
 
 // implement destructor
 DefineVarCommand::~DefineVarCommand() {
@@ -42,7 +42,7 @@ unsigned DefineVarCommand::execute(vector<string>::iterator it) {
         try {
             e = s->m_inter->interpret(val_as_str);
             value = e->calculate();
-        } catch (const char *e) {
+        } catch (const char *ex) {
             cerr << "error: could not interpret: " << to_string(value) << endl;
         }
         if (varExists) {

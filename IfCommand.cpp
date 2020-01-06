@@ -7,7 +7,7 @@
 
 unsigned IfCommand::execute(vector<string>::iterator it) {
   //cout << "in if condition" << endl;
-  Singleton *s = Singleton::getInstance();
+  //Singleton *s = Singleton::getInstance();
   // make list of commands to execute in each iteration
   this->makeCommandsList(it);
   string condition_str;

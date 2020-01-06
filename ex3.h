@@ -76,7 +76,7 @@ class Parser {
   static vector<string> lexer(const string &);
 
   // parse func declaration
-  void parse(vector<string> &, map<string, Command *>);
+  void parse(vector<string> &);
 };
 
 
